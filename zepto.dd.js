@@ -185,7 +185,7 @@
   };
 
   $(function () {
-    if (!!('ontouchstart' in window)) {
+    if ($.touchable) {
       $(document).on("touchend", touchDrop);
     }
     else {
