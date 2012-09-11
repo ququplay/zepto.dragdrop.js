@@ -29,7 +29,7 @@
           revert: opts.revert });
       }
 
-      opts.beforeDrag && this.opts.beforeDrag.call($this);
+      opts.beforeDrag && opts.beforeDrag.call($this);
       el = $this;
     }
 
@@ -38,9 +38,9 @@
 
   function dragEnd(e) {
     if (el) {
+      e.el = el;
       el.css('z-index', 1);
       opts.afterDrag && this.opts.afterDrag.call(el);
-      e.el = el;
       el = null;
     }
 
@@ -123,8 +123,8 @@
     if (isInRange(x, y)) {
        drop(e, x, y);
     }
-    else if (e.dragEl.data('revert')) {
-      revert(e.dragEl);
+    else if (e.el.data('revert')) {
+      revert(e.el);
     }
   }
 
@@ -138,7 +138,7 @@
   }
 
   function mouseDrop(e) {
-    if (e.dragEl) {
+    if (e.el) {
       dropOrRevert(e, e.pageX, e.pageY);
     }
 
@@ -147,7 +147,7 @@
 
   function drop(e, x, y) {
     var isDrop = true;
-    var dragEl = e.dragEl;
+    var dragEl = e.el;
     dragEl.css({ display: 'none' });
     var dropEl = $(document.elementFromPoint(x, y));
     dragEl.css({ display: 'block' });

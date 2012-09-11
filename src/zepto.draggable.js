@@ -29,7 +29,7 @@
           revert: opts.revert });
       }
 
-      opts.beforeDrag && this.opts.beforeDrag.call($this);
+      opts.beforeDrag && opts.beforeDrag.call($this);
       el = $this;
     }
 
@@ -38,9 +38,9 @@
 
   function dragEnd(e) {
     if (el) {
+      e.el = el;
       el.css('z-index', 1);
       opts.afterDrag && this.opts.afterDrag.call(el);
-      e.el = el;
       el = null;
     }
 
