@@ -10,15 +10,14 @@
 
   "use strict";
 
-  var el, opts, ctx;
+  var dragEl, opts, ctx;
 
   function dragStart(e) {
     var offset, zIndex, $this;
-    if (!el) {
+    if (!dragEl) {
       $this = $(this);
       offset = $this.offset();
-      zIndex = parseInt($this.css('z-index'), 10);
-      $this.css('z-index', zIndex + 1);
+      setZIndex($this, 1);
       $this.data(offset);
 
       if (opts.revert && !$this.data('revert')) {
@@ -30,26 +29,26 @@
 
       ctx.trigger('dragstart', [e, $this]);
       opts.beforeDrag && opts.beforeDrag.call(ctx, $this);
-      el = $this;
+      dragEl = $this;
     }
 
     return false;
   }
 
   function dragEnd(e) {
-    if (el) {
-      e.el = el;
-      el.css('z-index', 1);
-      ctx.trigger('dragend', [e, el]);
-      opts.afterDrag && opts.afterDrag.call(ctx, el);
-      el = null;
+    if (dragEl) {
+      e.el = dragEl;
+      setZIndex(dragEl, -1);
+      ctx.trigger('dragend', [e, dragEl]);
+      opts.afterDrag && opts.afterDrag.call(ctx, dragEl);
+      dragEl = null;
     }
 
     return false;
   }
 
   function touchDrag(e) {
-    if (el &&
+    if (dragEl &&
         e.targetTouches.length > 0) {
       var touch = e.targetTouches[0];
       setPosition(touch.pageX, touch.pageY);
@@ -59,7 +58,7 @@
   }
 
   function mouseDrag (e) {
-    if (el) {
+    if (dragEl) {
       setPosition(e.pageX, e.pageY);
     }
 
@@ -67,18 +66,23 @@
   }
 
   function setPosition(x, y) {
-    var h = el.height();
-    var w = el.width();
+    var h = dragEl.height();
+    var w = dragEl.width();
     var offset = findOffset();
     var left = x - w / offset;
     var top = y - h / offset;
-    el.css({ left: left, top: top });
+    dragEl.css({ left: left, top: top });
   }
 
   function findOffset() {
-    var ow = el.data('width');
-    var nw = el.width();
+    var ow = dragEl.data('width');
+    var nw = dragEl.width();
     return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
+  }
+
+  function setZIndex(el, val) {
+    var zIndex = parseInt(el.css('z-index'), 10);
+    el.css('z-index', zIndex + val);
   }
 
   // draggable constructor
