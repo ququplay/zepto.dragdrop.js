@@ -10,11 +10,10 @@
 
   "use strict";
 
-  var el, opts;
+  var el, opts, ctx;
 
   function dragStart(e) {
     var offset, zIndex, $this;
-
     if (!el) {
       $this = $(this);
       offset = $this.offset();
@@ -29,7 +28,8 @@
           revert: opts.revert });
       }
 
-      opts.beforeDrag && opts.beforeDrag.call($this);
+      ctx.trigger('dragstart', [e, $this]);
+      opts.beforeDrag && opts.beforeDrag.call(ctx, $this);
       el = $this;
     }
 
@@ -40,7 +40,8 @@
     if (el) {
       e.el = el;
       el.css('z-index', 1);
-      opts.afterDrag && this.opts.afterDrag.call(el);
+      ctx.trigger('dragend', [e, el]);
+      opts.afterDrag && opts.afterDrag.call(ctx, el);
       el = null;
     }
 
@@ -82,9 +83,19 @@
 
   // draggable constructor
   $.fn.draggable = function (options) {
-    opts = options || {};
     var eventName = ($.touchable) ? "touchstart" : "mousedown";
-    $(this).on(eventName, dragStart);
+
+    opts = options || {};
+    ctx = (opts.context) ? opts.context : $(this);
+
+    return this.each(function () {
+      if (opts.selector) {
+        $(this).on(eventName, opts.selector, dragStart);
+      }
+      else {
+        $(this).on(eventName, dragStart);
+      }
+    });
   }
 
   $(function () {

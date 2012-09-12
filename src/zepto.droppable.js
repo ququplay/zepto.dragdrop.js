@@ -28,7 +28,7 @@
   }
 
   function touchDrop(e) {
-    if (e.dragEl && e.changedTouches.length == 1) {
+    if (el && e.el && e.changedTouches.length == 1) {
       var touch = e.changedTouches[0];
       dropOrRevert(e, touch.pageX, touch.pageY);
     }
@@ -37,7 +37,7 @@
   }
 
   function mouseDrop(e) {
-    if (e.el) {
+    if (el && e.el) {
       dropOrRevert(e, e.pageX, e.pageY);
     }
 
@@ -71,7 +71,7 @@
     var rev = dragEl.data('revert');
 
     if ($.isFunction(rev)) {
-      rev.call(el);
+      rev.call(dragEl);
     }
 
     dragEl.css({ left: l, top: t });
