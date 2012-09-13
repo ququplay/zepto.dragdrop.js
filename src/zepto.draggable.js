@@ -10,106 +10,124 @@
 
   "use strict";
 
-  var dragEl, opts, ctx;
+  var draggable; // current draggable
 
-  function dragStart(e) {
-    var offset, zIndex, $this;
-    if (!dragEl) {
-      $this = $(this);
-      offset = $this.offset();
-      setZIndex($this, 1);
-      $this.data(offset);
-
-      if (opts.revert && !$this.data('revert')) {
-        $this.data({
-          rtop: offset.top,
-          rleft: offset.left,
-          revert: opts.revert });
-      }
-
-      ctx.trigger('dragstart', [e, $this]);
-      opts.beforeDrag && opts.beforeDrag.call(ctx, $this);
-      dragEl = $this;
-    }
-
-    return false;
-  }
-
-  function dragEnd(e) {
-    if (dragEl) {
-      e.el = dragEl;
-      setZIndex(dragEl, -1);
-      ctx.trigger('dragend', [e, dragEl]);
-      opts.afterDrag && opts.afterDrag.call(ctx, dragEl);
-      dragEl = null;
-    }
-
-    return false;
-  }
-
-  function touchDrag(e) {
-    if (dragEl &&
-        e.targetTouches.length > 0) {
-      var touch = e.targetTouches[0];
-      setPosition(touch.pageX, touch.pageY);
-    }
-
-    return false;
-  }
-
-  function mouseDrag (e) {
-    if (dragEl) {
-      setPosition(e.pageX, e.pageY);
-    }
-
-    return false;
-  }
-
-  function setPosition(x, y) {
-    var h = dragEl.height();
-    var w = dragEl.width();
-    var offset = findOffset();
-    var left = x - w / offset;
-    var top = y - h / offset;
-    dragEl.css({ left: left, top: top });
-  }
-
-  function findOffset() {
-    var ow = dragEl.data('width');
-    var nw = dragEl.width();
-    return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
-  }
-
-  function setZIndex(el, val) {
-    var zIndex = parseInt(el.css('z-index'), 10);
-    el.css('z-index', zIndex + val);
-  }
-
-  // draggable constructor
-  $.fn.draggable = function (options) {
+  function Draggable(el, opts) {
     var eventName = ($.touchable) ? "touchstart" : "mousedown";
 
-    opts = options || {};
-    ctx = (opts.context) ? opts.context : $(this);
+    this.el = el;
+    this.opts = opts || {};
+    this.ctx = this.opts.context || this.el;
 
-    return this.each(function () {
-      if (opts.selector) {
-        $(this).on(eventName, opts.selector, dragStart);
+    if (this.opts.selector) {
+      this.el.on(eventName, this.opts.selector, $.proxy(this.dragStart, this));
+    }
+    else {
+      this.el.on(eventName, $.proxy(this.dragStart, this));
+    }
+  }
+
+  Draggable.prototype = {
+    constructor: Draggable,
+
+    dragStart: function (e) {
+      var offset, zIndex;
+
+      if (!draggable) {
+        this.curEl = $(e.target);
+        offset = this.curEl.offset();
+
+        this.setZIndex(this.curEl, 1);
+        this.curEl.data(offset);
+
+        if (this.opts.revert && !this.curEl.data('revert')) {
+          this.curEl.data({
+            rtop: offset.top,
+            rleft: offset.left,
+            revert: this.opts.revert });
+        }
+
+        this.ctx.trigger('dragstart', [e, this.curEl]);
+        this.opts.beforeDrag && this.opts.beforeDrag.call(this.ctx, this.curEl);
+        draggable = this;
+      }
+
+      return false;
+    },
+
+    dragEnd: function (e) {
+      if (draggable) {
+        e.el = this.curEl;
+        this.setZIndex(this.curEl, -1);
+        this.ctx.trigger('dragend', [e, this.curEl]);
+        this.opts.afterDrag && this.opts.afterDrag.call(this.ctx, this.curEl);
+        draggable = null;
+      }
+
+      return false;
+    },
+
+    drag: function (e) {
+      if ($.touchable) {
+        if (e.targetTouches.length > 0) {
+          var touch = e.targetTouches[0];
+          this.setPosition(touch.pageX, touch.pageY);
+        }
       }
       else {
-        $(this).on(eventName, dragStart);
+        this.setPosition(e.pageX, e.pageY);
+      }
+
+      return false;
+    },
+
+    setPosition: function (x, y) {
+      var h = this.curEl.height();
+      var w = this.curEl.width();
+      var offset = this.findOffset();
+      var left = x - w / offset;
+      var top = y - h / offset;
+      this.curEl.css({ left: left, top: top });
+    },
+
+    findOffset: function () {
+      var ow = this.curEl.data('width');
+      var nw = this.curEl.width();
+      return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
+    },
+
+    setZIndex: function (el, val) {
+      var zIndex = parseInt(el.css('z-index'), 10);
+      el.css('z-index', zIndex + val);
+    }
+  };
+
+  // draggable plugin
+  $.fn.draggable = function (options) {
+    return this.each(function () {
+      var $this = $(this);
+      var data = $this.data('draggable');
+      if (!data) {
+        $this.data('draggable', (data = new Draggable($this, options)));
       }
     });
   }
 
   $(function () {
     //TODO: support unbind
-    if ($.touchable) {
-      $(document).on({ touchmove: touchDrag, touchend: dragEnd });
-    }
-    else {
-      $(document).on({ mousemove: mouseDrag, mouseup: dragEnd });
-    }
+    $(document).on("mousemove touchmove mouseup touchend", function (e) {
+      if (!draggable) return;
+      switch(e.type) {
+        case "mousemove":
+        case "touchmove":
+          Draggable.prototype.drag.call(draggable, e);
+          break;
+        case "mouseup":
+        case "touchend":
+          Draggable.prototype.dragEnd.call(draggable, e);
+          break;
+      }
+    });
   });
 
 })(Zepto);
