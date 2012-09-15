@@ -15,36 +15,34 @@
     this.opts = opts || {};
   }
 
-  Droppable.prototype = {
-    drop: function (e) {
-      var isDrop = true;
-      var dragEl = e.el;
+  Droppable.prototype.drop = function (e) {
+    var isDrop = true;
+    var dragEl = e.el;
 
-      // TODO: handle other types of selectors
-      if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
-        isDrop = false;
-      }
-      if (isDrop && this.opts.drop) {
-        isDrop &= this.opts.drop.call(this.el, e, dragEl, this.el);
-      }
-
-      // only revert if element was not dropped
-      if (!isDrop && dragEl.data('revert')) {
-        this.revert(dragEl);
-      }
-    },
-
-    revert: function (dragEl) {
-      var l = dragEl.data('rleft');
-      var t = dragEl.data('rtop');
-      var rev = dragEl.data('revert');
-
-      if ($.isFunction(rev)) {
-        rev.call(dragEl);
-      }
-
-      dragEl.css({ left: l, top: t });
+    // TODO: handle other types of selectors
+    if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
+      isDrop = false;
     }
+    if (isDrop && this.opts.drop) {
+      isDrop &= this.opts.drop.call(this.el, e, dragEl, this.el);
+    }
+
+    // only revert if element was not dropped
+    if (!isDrop && dragEl.data('revert')) {
+      this.revert(dragEl);
+    }
+  };
+
+  Droppable.prototype.revert = function (dragEl) {
+    var l = dragEl.data('rleft');
+    var t = dragEl.data('rtop');
+    var rev = dragEl.data('revert');
+
+    if ($.isFunction(rev)) {
+      rev.call(dragEl);
+    }
+
+    dragEl.css({ left: l, top: t });
   };
 
   // helpers
