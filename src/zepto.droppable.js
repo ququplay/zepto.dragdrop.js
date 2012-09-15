@@ -10,85 +10,92 @@
 
   "use strict";
 
-  var el, opts;
-
-  function isInRange(x, y) {
-    var o = el.offset();
-    return x >= o.left && x <= o.left + o.width &&
-      y >= o.top && y <= o.top + o.height;
+  function Droppable(el, opts) {
+    this.el = el;
+    this.opts = opts || {};
   }
 
-  function dropOrRevert(e, x, y) {
-    if (isInRange(x, y)) {
-       drop(e, x, y);
+  Droppable.prototype = {
+    drop: function (e) {
+      var isDrop = true;
+      var dragEl = e.el;
+
+      // TODO: handle other types of selectors
+      if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
+        isDrop = false;
+      }
+      if (isDrop && this.opts.drop) {
+        isDrop &= this.opts.drop.call(this.el, e, dragEl, this.el);
+      }
+
+      // only revert if element was not dropped
+      if (!isDrop && dragEl.data('revert')) {
+        this.revert(dragEl);
+      }
+    },
+
+    revert: function (dragEl) {
+      var l = dragEl.data('rleft');
+      var t = dragEl.data('rtop');
+      var rev = dragEl.data('revert');
+
+      if ($.isFunction(rev)) {
+        rev.call(dragEl);
+      }
+
+      dragEl.css({ left: l, top: t });
     }
-    else if (e.el.data('revert')) {
-      revert(e.el);
+  };
+
+  // helpers
+  function getPos(e) {
+    var x, y;
+    if ($.touchable) {
+      if (e.targetTouches.length == 1) {
+        x = e.targetTouches[0].x, y = e.targetTouches[0].y;
+      }
     }
+    else {
+      x = e.pageX, y = e.pageY;
+    }
+    return { x: x, y: y };
   }
 
-  function touchDrop(e) {
-    if (el && e.el && e.changedTouches.length == 1) {
-      var touch = e.changedTouches[0];
-      dropOrRevert(e, touch.pageX, touch.pageY);
+  function dropOrRevert(e) {
+    var droppable, pos, dragEl, dropEl;
+
+    if (e.el) {
+      pos = getPos(e);
+      dragEl = e.el;
+      dragEl.css({ display: 'none' });
+      dropEl = $.elementFromPoint(pos.x, pos.y);
+      dragEl.css({ display: 'block' });
+      droppable = $(dropEl).data('droppable');
+      if (droppable) {
+        droppable.drop(e);
+      }
+      else if (dragEl.data('revert')){
+        Droppable.prototype.revert(dragEl);
+      }
     }
 
     return false;
-  }
-
-  function mouseDrop(e) {
-    if (el && e.el) {
-      dropOrRevert(e, e.pageX, e.pageY);
-    }
-
-    return false;
-  }
-
-  function drop(e, x, y) {
-    var isDrop = true;
-    var dragEl = e.el;
-    dragEl.css({ display: 'none' });
-    var dropEl = $(document.elementFromPoint(x, y));
-    dragEl.css({ display: 'block' });
-
-    // TODO: handle other types of selectors
-    if (opts.selector && !dropEl.hasClass(opts.selector)) {
-      isDrop = false;
-    }
-    if (isDrop && opts.drop) {
-      isDrop &= opts.drop.call(el, e, dragEl, $(dropEl));
-    }
-
-    // only revert if element was not dropped
-    if (!isDrop && dragEl.data('revert')) {
-      revert(dragEl);
-    }
-  }
-
-  function revert(dragEl) {
-    var l = dragEl.data('rleft');
-    var t = dragEl.data('rtop');
-    var rev = dragEl.data('revert');
-
-    if ($.isFunction(rev)) {
-      rev.call(dragEl);
-    }
-
-    dragEl.css({ left: l, top: t });
   }
 
   // droppable api
   $.fn.droppable = function (options) {
-    opts = options || {};
-    el = this;
+    return this.each(function () {
+      var $this = $(this);
+      var droppable = $this.data('droppable');
+      if (!droppable) {
+        $this.data('droppable', (droppable = new Droppable($this, options)));
+      }
+    });
   };
 
+  // bind mouse/touch event
   $(function () {
-    if ($.touchable) {
-      $(document).on("touchend", touchDrop);
-    }
-    else {
-      $(document).on("mouseup", mouseDrop);
-    }
+    $(document).on("mouseup touchend", dropOrRevert);
   });
+
 })(Zepto);

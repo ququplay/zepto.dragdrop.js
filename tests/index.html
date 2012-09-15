@@ -16,6 +16,20 @@
       line-height: 40px;
       text-align: center;
       position: absolute;
+      z-index: 200;
+    }
+
+    .drop {
+      width: 300px;
+      height: 300px;
+      line-height: 40px;
+      text-align: center;
+      position: absolute;
+      background: #00ff00;
+      border: 1px solid #ff0000;
+      left: 500px;
+      top: 500px;
+      z-index: 199;
     }
 
     .test {
@@ -49,10 +63,13 @@
 
   <!-- include spec files here... -->
   <script type="text/javascript" src="zepto.draggable_spec.js"></script>
-
+  <!--
+  <script type="text/javascript" src="zepto.droppable_spec.js"></script>
+  -->
   <script type="text/javascript">
     (function() {
-      var jasmineEnv = jasmine.getEnv();
+
+     var jasmineEnv = jasmine.getEnv();
       jasmineEnv.updateInterval = 1000;
 
       var htmlReporter = new jasmine.HtmlReporter();
@@ -77,13 +94,17 @@
       }
 
     })();
+
   </script>
 
 </head>
 
 <body>
-  <div id="drag1" class="drag">drag1</div>
+  <div id="drag1" class="drag">drag 1</div>
+  <div id="drag2" class="drag">drag 2</div>
+
   <div id="wrapper"></div>
+  <div id="drop" class="drop">drop</div>
 
 </body>
 </html>
