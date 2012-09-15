@@ -47,16 +47,19 @@
 
   // helpers
   function getPos(e) {
-    var x, y;
+    var pos, touch;
+
     if ($.touchable) {
       if (e.targetTouches.length == 1) {
-        x = e.targetTouches[0].x, y = e.targetTouches[0].y;
+        touch = e.targetTouches[0];
+        pos = { x: touch.x, y: touch.y };
       }
     }
     else {
-      x = e.pageX, y = e.pageY;
+      pos = { x: e.pageX, y: e.pageY };
     }
-    return { x: x, y: y };
+
+    return pos;
   }
 
   function dropOrRevert(e) {

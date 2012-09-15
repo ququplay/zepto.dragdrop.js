@@ -12,9 +12,9 @@
     var moved = false;
 
     if (window.pageYOffset > 0) {
-      moved = (doc.elementFromPoint(0, window.pageYOffset + window.innerHeight -1) == null);
-    } else if (pageXOffset > 0) {
-      moved = (doc.elementFromPoint(window.pageXOffset + window.innerWidth -1, 0) == null);
+      moved = (doc.elementFromPoint(0, window.pageYOffset + window.innerHeight -1) === null);
+    } else if (window.pageXOffset > 0) {
+      moved = (doc.elementFromPoint(window.pageXOffset + window.innerWidth -1, 0) === null);
     }
 
     if (moved) {
