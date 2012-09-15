@@ -20,47 +20,40 @@
     this.ctx = this.opts.context || this.el;
 
     if (this.opts.selector) {
-      this.el.on(eventName, this.opts.selector, $.proxy(this.dragStart, this));
+      this.el.on(eventName, this.opts.selector, $.proxy(this.start, this));
     }
     else {
-      this.el.on(eventName, $.proxy(this.dragStart, this));
+      this.el.on(eventName, $.proxy(this.start, this));
     }
   }
 
   Draggable.prototype = {
     constructor: Draggable,
 
-    dragStart: function (e) {
+    start: function (e) {
       var offset, zIndex;
 
       if (!draggable) {
         this.curEl = $(e.target);
         offset = this.curEl.offset();
-
-        this.setZIndex(this.curEl, 1);
         this.curEl.data(offset);
+        this.setRevert(offset);
+        this.setZIndex(1);
 
-        if (this.opts.revert && !this.curEl.data('revert')) {
-          this.curEl.data({
-            rtop: offset.top,
-            rleft: offset.left,
-            revert: this.opts.revert });
-        }
-
-        this.ctx.trigger('dragstart', [e, this.curEl]);
-        this.opts.beforeDrag && this.opts.beforeDrag.call(this.ctx, this.curEl);
+        $(this.ctx).trigger('draggable:start', [e, this.curEl]);
+        this.opts.start && this.opts.start.call(this.ctx, this.curEl);
         draggable = this;
       }
 
       return false;
     },
 
-    dragEnd: function (e) {
+    stop: function (e) {
       if (draggable) {
         e.el = this.curEl;
-        this.setZIndex(this.curEl, -1);
-        this.ctx.trigger('dragend', [e, this.curEl]);
-        this.opts.afterDrag && this.opts.afterDrag.call(this.ctx, this.curEl);
+        this.setZIndex(-1);
+        $(this.ctx).trigger('draggable:end', [e, this.curEl]);
+        this.opts.stop && this.opts.stop.call(this.ctx, this.curEl);
         draggable = null;
       }
 
@@ -78,6 +71,8 @@
         this.setPosition(e.pageX, e.pageY);
       }
 
+      this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
+
       return false;
     },
 
@@ -90,15 +85,24 @@
       this.curEl.css({ left: left, top: top });
     },
 
+    setRevert: function (offset) {
+      if (this.opts.revert && !this.curEl.data('revert')) {
+        this.curEl.data({
+          rtop: offset.top,
+          rleft: offset.left,
+          revert: this.opts.revert });
+      }
+    },
+
     findOffset: function () {
       var ow = this.curEl.data('width');
       var nw = this.curEl.width();
       return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
     },
 
-    setZIndex: function (el, val) {
-      var zIndex = parseInt(el.css('z-index'), 10);
-      el.css('z-index', zIndex + val);
+    setZIndex: function (val) {
+      var zIndex = parseInt(this.curEl.css('z-index'), 10);
+      this.curEl.css('z-index', zIndex + val);
     }
   };
 
@@ -124,7 +128,7 @@
           break;
         case "mouseup":
         case "touchend":
-          draggable.dragEnd(e);
+          draggable.stop(e);
           break;
       }
     });
