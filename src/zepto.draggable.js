@@ -117,15 +117,14 @@
     //TODO: support unbind
     $(document).on("mousemove touchmove mouseup touchend", function (e) {
       if (!draggable) return;
-
-      switch(e.type) {
+      switch (e.type) {
         case "mousemove":
         case "touchmove":
-          Draggable.prototype.drag.call(draggable, e);
+          draggable.drag(e);
           break;
         case "mouseup":
         case "touchend":
-          Draggable.prototype.dragEnd.call(draggable, e);
+          draggable.dragEnd(e);
           break;
       }
     });
