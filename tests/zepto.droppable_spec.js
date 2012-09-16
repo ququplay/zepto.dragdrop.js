@@ -1,21 +1,22 @@
 describe("Droppable", function() {
 
+  var dragEl, dropEl;
+
   beforeEach(function () {
+    dragEl = $('<div class="drag"></div>').appendTo('body');
+    dropEl = $('<div class="drop"></div>').appendTo('body');
+
+    dragEl.css({ top: 0, left: 0 });
+    dropEl.css({ top: 300, left: 300 });
   });
 
-  it("should drop element to droppable", function () {
-   //  console.log('dropppable');
-    $('#drag2').draggable();
-    //$('#drap').droppable();
+  it("should drop element", function () {
+    var callback = jasmine.createSpy();
 
-    $('#drag2').simulate('mousedown');
-    $(document)
-      .simulate('mousemove', { x: 600, y: 600 })
-      .simulate('mouseup');
+    dragEl.draggable();
+    dropEl.droppable({ drop: callback });
+    dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
 
-    var o = $('#drag2').offset();
-   // console.log(o);
-    expect(o.left).toBe(580);
-    expect(o.top).toBe(580);
+    expect(callback).wasCalled();
   });
 });

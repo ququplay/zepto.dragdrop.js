@@ -6,6 +6,23 @@
     return !!('ontouchstart' in window);
   })();
 
+  // helpers
+  $.getPos = function (e) {
+    var pos, touch;
+
+    if ($.touchable) {
+      if (e.targetTouches.length == 1) {
+        touch = e.targetTouches[0];
+        pos = { x: touch.x, y: touch.y };
+      }
+    }
+    else {
+      pos = { x: e.pageX, y: e.pageY };
+    }
+
+    return pos;
+  }
+
   var doc = document;
 
   $.elementFromPoint = function (x, y) {

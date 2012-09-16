@@ -1,10 +1,10 @@
 describe("Draggable", function() {
 
-  var dragEl, dropEl;
+  var dragEl;
 
   beforeEach(function () {
     dragEl = $('<div class="drag"></div>').appendTo('body');
-    dragEl.css({top: 0, left: 0});
+    dragEl.css({ top: 0, left: 0 });
   });
 
   afterEach(function () {

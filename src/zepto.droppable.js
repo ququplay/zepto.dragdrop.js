@@ -45,28 +45,12 @@
     dragEl.css({ left: l, top: t });
   };
 
-  // helpers
-  function getPos(e) {
-    var pos, touch;
-
-    if ($.touchable) {
-      if (e.targetTouches.length == 1) {
-        touch = e.targetTouches[0];
-        pos = { x: touch.x, y: touch.y };
-      }
-    }
-    else {
-      pos = { x: e.pageX, y: e.pageY };
-    }
-
-    return pos;
-  }
 
   function dropOrRevert(e) {
     var droppable, pos, dragEl, dropEl;
 
     if (e.el) {
-      pos = getPos(e);
+      pos = $.getPos(e);
       dragEl = e.el;
       dragEl.css({ display: 'none' });
       dropEl = $.elementFromPoint(pos.x, pos.y);

@@ -5,7 +5,7 @@
       $(this).simulate('mousedown', fromPos);
       $(document)
         .simulate('mousemove', toPos)
-        .simulate('mouseup');
+        .simulate('mouseup',toPos);
     });
   }
 })(Zepto);

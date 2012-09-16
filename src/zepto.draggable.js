@@ -61,16 +61,8 @@
     },
 
     drag: function (e) {
-      if ($.touchable) {
-        if (e.targetTouches.length > 0) {
-          var touch = e.targetTouches[0];
-          this.setPosition(touch.pageX, touch.pageY);
-        }
-      }
-      else {
-        this.setPosition(e.pageX, e.pageY);
-      }
-
+      var pos = $.getPos(e);
+      this.setPosition(pos.x, pos.y);
       this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
 
       return false;
@@ -97,6 +89,7 @@
     findOffset: function () {
       var ow = this.curEl.data('width');
       var nw = this.curEl.width();
+
       return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
     },
 
@@ -112,7 +105,8 @@
       var $this = $(this);
       var data = $this.data('draggable');
       if (!data) {
-        $this.data('draggable', (data = new Draggable($this, options)));
+        data = new Draggable($this, options);
+        $this.data('draggable', data);
       }
     });
   }
