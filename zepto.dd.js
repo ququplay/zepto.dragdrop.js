@@ -10,106 +10,122 @@
 
   "use strict";
 
-  var dragEl, opts, ctx;
+  var draggable; // current draggable
 
-  function dragStart(e) {
-    var offset, zIndex, $this;
-    if (!dragEl) {
-      $this = $(this);
-      offset = $this.offset();
-      setZIndex($this, 1);
-      $this.data(offset);
-
-      if (opts.revert && !$this.data('revert')) {
-        $this.data({
-          rtop: offset.top,
-          rleft: offset.left,
-          revert: opts.revert });
-      }
-
-      ctx.trigger('dragstart', [e, $this]);
-      opts.beforeDrag && opts.beforeDrag.call(ctx, $this);
-      dragEl = $this;
-    }
-
-    return false;
-  }
-
-  function dragEnd(e) {
-    if (dragEl) {
-      e.el = dragEl;
-      setZIndex(dragEl, -1);
-      ctx.trigger('dragend', [e, dragEl]);
-      opts.afterDrag && opts.afterDrag.call(ctx, dragEl);
-      dragEl = null;
-    }
-
-    return false;
-  }
-
-  function touchDrag(e) {
-    if (dragEl &&
-        e.targetTouches.length > 0) {
-      var touch = e.targetTouches[0];
-      setPosition(touch.pageX, touch.pageY);
-    }
-
-    return false;
-  }
-
-  function mouseDrag (e) {
-    if (dragEl) {
-      setPosition(e.pageX, e.pageY);
-    }
-
-    return false;
-  }
-
-  function setPosition(x, y) {
-    var h = dragEl.height();
-    var w = dragEl.width();
-    var offset = findOffset();
-    var left = x - w / offset;
-    var top = y - h / offset;
-    dragEl.css({ left: left, top: top });
-  }
-
-  function findOffset() {
-    var ow = dragEl.data('width');
-    var nw = dragEl.width();
-    return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
-  }
-
-  function setZIndex(el, val) {
-    var zIndex = parseInt(el.css('z-index'), 10);
-    el.css('z-index', zIndex + val);
-  }
-
-  // draggable constructor
-  $.fn.draggable = function (options) {
+  function Draggable(el, opts) {
     var eventName = ($.touchable) ? "touchstart" : "mousedown";
 
-    opts = options || {};
-    ctx = (opts.context) ? opts.context : $(this);
+    this.el = el;
+    this.opts = opts || {};
+    this.ctx = this.opts.context || this.el;
 
-    return this.each(function () {
-      if (opts.selector) {
-        $(this).on(eventName, opts.selector, dragStart);
+    if (this.opts.selector) {
+      this.el.on(eventName, this.opts.selector, $.proxy(this.start, this));
+    }
+    else {
+      this.el.on(eventName, $.proxy(this.start, this));
+    }
+  }
+
+  Draggable.prototype = {
+    constructor: Draggable,
+
+    start: function (e) {
+      var offset, zIndex;
+
+      if (!draggable) {
+        this.curEl = $(e.target);
+        offset = this.curEl.offset();
+        this.curEl.data(offset);
+        this.setRevert(offset);
+        this.setZIndex(1);
+
+        $(this.ctx).trigger('draggable:start', [e, this.curEl]);
+        this.opts.start && this.opts.start.call(this.ctx, this.curEl);
+        draggable = this;
       }
-      else {
-        $(this).on(eventName, dragStart);
+
+      return false;
+    },
+
+    stop: function (e) {
+      if (draggable) {
+        e.el = this.curEl;
+        this.setZIndex(-1);
+        $(this.ctx).trigger('draggable:end', [e, this.curEl]);
+        this.opts.stop && this.opts.stop.call(this.ctx, this.curEl);
+        draggable = null;
+      }
+
+      return false;
+    },
+
+    drag: function (e) {
+      var pos = $.getPos(e);
+      this.setPosition(pos.x, pos.y);
+      this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
+
+      return false;
+    },
+
+    setPosition: function (x, y) {
+      var h = this.curEl.height();
+      var w = this.curEl.width();
+      var offset = this.findOffset();
+      var left = x - w / offset;
+      var top = y - h / offset;
+      this.curEl.css({ left: left, top: top });
+    },
+
+    setRevert: function (offset) {
+      if (this.opts.revert && !this.curEl.data('revert')) {
+        this.curEl.data({
+          rtop: offset.top,
+          rleft: offset.left,
+          revert: this.opts.revert });
+      }
+    },
+
+    findOffset: function () {
+      var ow = this.curEl.data('width');
+      var nw = this.curEl.width();
+
+      return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
+    },
+
+    setZIndex: function (val) {
+      var zIndex = parseInt(this.curEl.css('z-index'), 10);
+      this.curEl.css('z-index', zIndex + val);
+    }
+  };
+
+  // draggable plugin
+  $.fn.draggable = function (options) {
+    return this.each(function () {
+      var $this = $(this);
+      var data = $this.data('draggable');
+      if (!data) {
+        data = new Draggable($this, options);
+        $this.data('draggable', data);
       }
     });
   }
 
   $(function () {
     //TODO: support unbind
-    if ($.touchable) {
-      $(document).on({ touchmove: touchDrag, touchend: dragEnd });
-    }
-    else {
-      $(document).on({ mousemove: mouseDrag, mouseup: dragEnd });
-    }
+    $(document).on("mousemove touchmove mouseup touchend", function (e) {
+      if (!draggable) return;
+      switch (e.type) {
+        case "mousemove":
+        case "touchmove":
+          draggable.drag(e);
+          break;
+        case "mouseup":
+        case "touchend":
+          draggable.stop(e);
+          break;
+      }
+    });
   });
 
 })(Zepto);
@@ -126,87 +142,82 @@
 
   "use strict";
 
-  var el, opts;
-
-  function isInRange(x, y) {
-    var o = el.offset();
-    return x >= o.left && x <= o.left + o.width &&
-      y >= o.top && y <= o.top + o.height;
+  function Droppable(el, opts) {
+    this.el = el;
+    this.opts = opts || {};
+    this.ctx = this.opts.context || this.el;
   }
 
-  function dropOrRevert(e, x, y) {
-    if (isInRange(x, y)) {
-       drop(e, x, y);
-    }
-    else if (e.el.data('revert')) {
-      revert(e.el);
-    }
-  }
-
-  function touchDrop(e) {
-    if (el && e.el && e.changedTouches.length == 1) {
-      var touch = e.changedTouches[0];
-      dropOrRevert(e, touch.pageX, touch.pageY);
-    }
-
-    return false;
-  }
-
-  function mouseDrop(e) {
-    if (el && e.el) {
-      dropOrRevert(e, e.pageX, e.pageY);
-    }
-
-    return false;
-  }
-
-  function drop(e, x, y) {
+  Droppable.prototype.drop = function (e) {
     var isDrop = true;
     var dragEl = e.el;
-    dragEl.css({ display: 'none' });
-    var dropEl = $(document.elementFromPoint(x, y));
-    dragEl.css({ display: 'block' });
 
     // TODO: handle other types of selectors
-    if (opts.selector && !dropEl.hasClass(opts.selector)) {
+    if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
       isDrop = false;
     }
-    if (isDrop && opts.drop) {
-      isDrop &= opts.drop.call(el, e, dragEl, $(dropEl));
+    if (isDrop && this.opts.drop) {
+      isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el);
     }
+
+    isDrop && $(this.ctx).trigger('droppable:drop', [e, dragEl, this.el]);
 
     // only revert if element was not dropped
     if (!isDrop && dragEl.data('revert')) {
-      revert(dragEl);
+      this.revert(dragEl);
     }
-  }
+  };
 
-  function revert(dragEl) {
-    var l = dragEl.data('rleft');
-    var t = dragEl.data('rtop');
+  Droppable.prototype.revert = function (dragEl) {
+    var left = dragEl.data('rleft');
+    var top = dragEl.data('rtop');
     var rev = dragEl.data('revert');
 
     if ($.isFunction(rev)) {
       rev.call(dragEl);
     }
 
-    dragEl.css({ left: l, top: t });
+    dragEl.css({ left: left, top: top });
+  };
+
+  function dropOrRevert(e) {
+    var droppable, pos, dragEl, dropEl;
+
+    if (e.el) {
+      pos = $.getPos(e);
+      dragEl = e.el;
+      dragEl.css({ display: 'none' });
+      dropEl = $.elementFromPoint(pos.x, pos.y);
+      dragEl.css({ display: 'block' });
+      droppable = $(dropEl).data('droppable');
+      if (droppable) {
+        droppable.drop(e);
+      }
+      else if (dragEl.data('revert')){
+        Droppable.prototype.revert(dragEl);
+      }
+    }
+
+    return false;
   }
 
   // droppable api
   $.fn.droppable = function (options) {
-    opts = options || {};
-    el = this;
+    return this.each(function () {
+      var $this = $(this);
+      var droppable = $this.data('droppable');
+      if (!droppable) {
+        droppable = new Droppable($this, options);
+        $this.data('droppable', droppable);
+      }
+    });
   };
 
+  // bind mouse/touch event
   $(function () {
-    if ($.touchable) {
-      $(document).on("touchend", touchDrop);
-    }
-    else {
-      $(document).on("mouseup", mouseDrop);
-    }
+    $(document).on("mouseup touchend", dropOrRevert);
   });
+
 })(Zepto);
 
 //     Zepto.js
@@ -283,5 +294,40 @@
   $.touchable = (function () {
     return !!('ontouchstart' in window);
   })();
+
+  // helpers
+  $.getPos = function (e) {
+    var pos, touch;
+
+    if ($.touchable) {
+      if (e.targetTouches.length == 1) {
+        touch = e.targetTouches[0];
+        pos = { x: touch.x, y: touch.y };
+      }
+    }
+    else {
+      pos = { x: e.pageX, y: e.pageY };
+    }
+
+    return pos;
+  }
+
+  var doc = document;
+
+  $.elementFromPoint = function (x, y) {
+    var moved = false;
+
+    if (window.pageYOffset > 0) {
+      moved = (doc.elementFromPoint(0, window.pageYOffset + window.innerHeight -1) === null);
+    } else if (window.pageXOffset > 0) {
+      moved = (doc.elementFromPoint(window.pageXOffset + window.innerWidth -1, 0) === null);
+    }
+
+    if (moved) {
+      return doc.elementFromPoint(x - window.pageXOffset, y - window.pageYOffset);
+    } else {
+      return doc.elementFromPoint(x, y);
+    }
+  }
 
 })(Zepto);
