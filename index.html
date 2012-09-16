@@ -28,32 +28,107 @@
         </ul>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <p><a href="http://travis-ci.org/mkuklis/asEvented"><img src="https://secure.travis-ci.org/mkuklis/asEvented.png" alt="build status"></a></p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<h1>asEvented</h1>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>Micro (only 3kb) drag &amp; drop library for Zepto with touch and mouse events.</p>
+
+<h2>Install</h2>
+
+<pre><code>&lt;script src="zepto.dd.min.js"&gt;&lt;/script&gt;
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>Simple Usage:</h2>
 
-<h3>Designer Templates</h3>
+<h3>drag:</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<pre><code>dragEl.draggable();
+</code></pre>
 
-<h3>Rather Drive Stick?</h3>
+<h3>drop:</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<pre><code>dropEl.droppable();
+</code></pre>
 
-<h3>Authors and Contributors</h3>
+<h2>Callbacks:</h2>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<h3>drag:</h3>
 
-<h3>Support or Contact</h3>
+<p>Drag supports three callbacks: <code>start</code>, <code>drag</code>, and <code>stop</code>. Start is fired at the start of the drag; drag during the drag; and stop when dragging stops.</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<pre><code>dragEl.draggable({
+  start: function () {
+
+  },
+  drag: function () {
+
+  },
+  stop: function () {
+
+  }
+});
+</code></pre>
+
+<h3>drop:</h3>
+
+<p>At the moment drop supports one callback <code>drop</code> which fires when draggable element id dropped into droppable element. Drop callback can be used to validate a drop action by returning <code>true</code> - successful drop or <code>false</code> - unsuccessful drop.</p>
+
+<pre><code>dragEl.draggable({
+  drop: function (e, dragEl, dropEl) {
+     // code here
+
+     return true;
+  }
+});
+</code></pre>
+
+<h2>Events:</h2>
+
+<h3>drag:</h3>
+
+<p>coming soon</p>
+
+<h3>drop:</h3>
+
+<p>coming soon</p>
+
+<h2>Options:</h2>
+
+<h3>drag:</h3>
+
+<p>coming soon</p>
+
+<h3>drop:</h3>
+
+<p>coming soon</p>
+
+<h2>License:</h2>
+
+<pre>
+(The MIT License)
+
+Copyright (c) 2012 Michal Kuklis
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</pre>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/mkuklis">mkuklis</a></p>
