@@ -47,7 +47,16 @@ At the moment drop supports one callback `drop` which fires when draggable eleme
       }
     });
 
-## Callbacks:
+## Events:
+###drag:
+
+coming soon
+
+###drop:
+
+coming soon
+
+## Options:
 ###drag:
 
 coming soon
