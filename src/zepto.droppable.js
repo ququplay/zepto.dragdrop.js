@@ -13,6 +13,7 @@
   function Droppable(el, opts) {
     this.el = el;
     this.opts = opts || {};
+    this.ctx = this.opts.context || this.el;
   }
 
   Droppable.prototype.drop = function (e) {
@@ -24,8 +25,10 @@
       isDrop = false;
     }
     if (isDrop && this.opts.drop) {
-      isDrop &= this.opts.drop.call(this.el, e, dragEl, this.el);
+      isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el);
     }
+
+    isDrop && $(this.ctx).trigger('droppable:drop', [e, dragEl, this.el]);
 
     // only revert if element was not dropped
     if (!isDrop && dragEl.data('revert')) {
@@ -34,17 +37,16 @@
   };
 
   Droppable.prototype.revert = function (dragEl) {
-    var l = dragEl.data('rleft');
-    var t = dragEl.data('rtop');
+    var left = dragEl.data('rleft');
+    var top = dragEl.data('rtop');
     var rev = dragEl.data('revert');
 
     if ($.isFunction(rev)) {
       rev.call(dragEl);
     }
 
-    dragEl.css({ left: l, top: t });
+    dragEl.css({ left: left, top: top });
   };
-
 
   function dropOrRevert(e) {
     var droppable, pos, dragEl, dropEl;
@@ -73,7 +75,8 @@
       var $this = $(this);
       var droppable = $this.data('droppable');
       if (!droppable) {
-        $this.data('droppable', (droppable = new Droppable($this, options)));
+        droppable = new Droppable($this, options);
+        $this.data('droppable', droppable);
       }
     });
   };

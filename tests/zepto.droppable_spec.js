@@ -10,6 +10,11 @@ describe("Droppable", function() {
     dropEl.css({ top: 300, left: 300 });
   });
 
+  afterEach(function () {
+    dragEl.remove();
+    dropEl.remove();
+  });
+
   it("should drop element", function () {
     var callback = jasmine.createSpy();
 
@@ -18,5 +23,32 @@ describe("Droppable", function() {
     dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
 
     expect(callback).wasCalled();
+  });
+
+  describe("options", function() {
+    it("should execute in different context", function () {
+      var ctx = {};
+      dragEl.draggable();
+      dropEl.droppable({
+        context: ctx,
+        drop: function () {
+          expect(this).toBe(ctx);
+        }
+      });
+
+      dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
+    });
+  });
+
+  describe("events", function () {
+    it("should trigger droppable:drop event", function () {
+      var callback = jasmine.createSpy();
+      dragEl.draggable();
+      dropEl.droppable();
+
+      dropEl.on('droppable:drop', callback);
+      dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
+      expect(callback).wasCalled();
+    });
   });
 });
