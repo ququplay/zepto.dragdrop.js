@@ -28,7 +28,7 @@
         </ul>
       </header>
       <section>
-        <p><a href="http://travis-ci.org/mkuklis/zepto.dd.js"><img src="https://secure.travis-ci.org/mkuklis/asEvented.png" alt="build status"></a></p>
+        <p><a href="http://travis-ci.org/mkuklis/zepto.dd.js"><img src="https://secure.travis-ci.org/mkuklis/zepto.dd.js.png" alt="build status"></a></p>
 
 <h1>zepto.dd.js</h1>
 
@@ -39,71 +39,78 @@
 <pre><code>&lt;script src="zepto.dd.min.js"&gt;&lt;/script&gt;
 </code></pre>
 
-<h2>Simple Usage:</h2>
+<h2>Simple Usage</h2>
 
-<h3>drag:</h3>
+<h3>drag</h3>
 
 <pre><code>dragEl.draggable();
 </code></pre>
 
-<h3>drop:</h3>
+<h3>drop</h3>
 
 <pre><code>dropEl.droppable();
 </code></pre>
 
-<h2>Callbacks:</h2>
+<h2>Callbacks</h2>
 
-<h3>drag:</h3>
+<h3>drag</h3>
 
 <p>Drag supports three callbacks: <code>start</code>, <code>drag</code>, and <code>stop</code>. Start is fired at the start of the drag; drag during the drag; and stop when dragging stops.</p>
 
 <pre><code>dragEl.draggable({
-  start: function () {
-
+  start: function (e, dragEl) {
+    // your code here
   },
-  drag: function () {
-
+  drag: function (e, dragEl) {
+    // your code here
   },
-  stop: function () {
-
+  stop: function (e, dragEl) {
+    // your code here
   }
 });
 </code></pre>
 
-<h3>drop:</h3>
+<h3>drop</h3>
 
-<p>At the moment drop supports one callback <code>drop</code> which fires when draggable element id dropped into droppable element. Drop callback can be used to validate a drop action by returning <code>true</code> - successful drop or <code>false</code> - unsuccessful drop.</p>
+<p>At the moment drop supports one callback <code>drop</code> which fires when draggable element is dropped into droppable element. Drop callback can be used to validate a drop action by returning <code>true</code> - successful drop or <code>false</code> - unsuccessful drop.</p>
 
 <pre><code>dragEl.draggable({
   drop: function (e, dragEl, dropEl) {
-     // code here
-
+     // your code here
      return true;
   }
 });
 </code></pre>
 
-<h2>Events:</h2>
+<h2>Events</h2>
 
-<h3>drag:</h3>
+<h3>drag</h3>
 
-<p>coming soon</p>
+<p>It's possible to bind to three different events <code>draggable:start</code>, <code>draggable:drag</code> and <code>draggable:stop</code> emitted by draggable.</p>
 
-<h3>drop:</h3>
+<pre><code>dragEl.on('draggable:start', function () {
+  // your code goes here
+});
+</code></pre>
 
-<p>coming soon</p>
+<h3>drop</h3>
 
-<h2>Options:</h2>
+<p>Droppable emit one event <code>droppable:drop</code> when element is successfully dropped.</p>
 
-<h3>drag:</h3>
+<h2>Options</h2>
 
-<p>coming soon</p>
+<h3>drag</h3>
 
-<h3>drop:</h3>
+<ul>
+<li>selector</li>
+<li>context</li>
+<li>revert</li>
+</ul><h3>drop</h3>
 
-<p>coming soon</p>
-
-<h2>License:</h2>
+<ul>
+<li>selector</li>
+<li>context</li>
+</ul><h2>License:</h2>
 
 <pre>
 (The MIT License)
