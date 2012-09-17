@@ -8,9 +8,9 @@ Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
 
     <script src="zepto.dd.min.js"></script>
 
-##Simple Usage:
+##Simple Usage
 
-###drag:
+###drag
 
     dragEl.draggable();
 
@@ -18,50 +18,59 @@ Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
 
     dropEl.droppable();
 
-## Callbacks:
+## Callbacks
 
-###drag:
+###drag
 Drag supports three callbacks: `start`, `drag`, and `stop`. Start is fired at the start of the drag; drag during the drag; and stop when dragging stops.
 
-
     dragEl.draggable({
-      start: function () {
-
+      start: function (e, dragEl) {
+        // your code here
       },
-      drag: function () {
-
+      drag: function (e, dragEl) {
+        // your code here
       },
-      stop: function () {
-
+      stop: function (e, dragEl) {
+        // your code here
       }
     });
 
-###drop:
-At the moment drop supports one callback `drop` which fires when draggable element id dropped into droppable element. Drop callback can be used to validate a drop action by returning `true` - successful drop or `false` - unsuccessful drop.
+###drop
+At the moment drop supports one callback `drop` which fires when draggable element is dropped into droppable element. Drop callback can be used to validate a drop action by returning `true` - successful drop or `false` - unsuccessful drop.
 
     dragEl.draggable({
       drop: function (e, dragEl, dropEl) {
-         // code here
-
+         // your code here
          return true;
       }
     });
 
-## Events:
-###drag:
+## Events
 
-coming soon
+###drag
 
-###drop:
+It's possible to bind to three different events `draggable:start`, `draggable:drag` and `draggable:stop` emitted by draggable.
 
-coming soon
+    dragEl.on('draggable:start', function () {
+      // your code goes here
+    });
 
-## Options:
-###drag:
 
-coming soon
+###drop
 
-###drop:
+Droppable emit one event `droppable:drop` when element is successfully dropped.
+
+## Options
+###drag
+
+ - selector
+ - context
+ - revert
+
+###drop
+
+ - selector
+ - context
 
 coming soon
 
