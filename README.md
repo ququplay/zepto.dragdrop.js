@@ -1,4 +1,4 @@
-[![build status](https://secure.travis-ci.org/mkuklis/asEvented.png)](http://travis-ci.org/mkuklis/zepto.dd.js)
+[![build status](https://secure.travis-ci.org/mkuklis/zepto.dd.js.png)](http://travis-ci.org/mkuklis/zepto.dd.js)
 # zepto.dd.js
 
 Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
