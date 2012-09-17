@@ -14,7 +14,7 @@ Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
 
     dragEl.draggable();
 
-###drop:
+###drop
 
     dropEl.droppable();
 
@@ -71,9 +71,6 @@ Droppable emit one event `droppable:drop` when element is successfully dropped.
 
  - selector
  - context
-
-coming soon
-
 
 ##License:
 <pre>
