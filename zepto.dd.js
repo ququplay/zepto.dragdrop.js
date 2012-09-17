@@ -1,5 +1,5 @@
 /**
- * zepto.dd.js v0.0.1 - Drag & Drop for Zepto with touch and mouse events.
+ * zepto.dd.js v0.1.0 - Drag & Drop for Zepto with touch and mouse events.
  *
  * Copyright 2012, Michal Kuklis
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -32,7 +32,6 @@
 
     start: function (e) {
       var offset, zIndex;
-
       if (!draggable) {
         this.curEl = $(e.target);
         offset = this.curEl.offset();
@@ -131,7 +130,7 @@
 })(Zepto);
 
 /**
- * zepto.dd.js v0.0.1 - Drag & Drop for Zepto with touch and mouse events.
+ * zepto.dd.js v0.1.0 - Drag & Drop for Zepto with touch and mouse events.
  *
  * Copyright 2012, Michal Kuklis
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -292,7 +291,9 @@
   "use strict";
 
   $.touchable = (function () {
-    return !!('ontouchstart' in window);
+    // http://modernizr.github.com/Modernizr/touch.html
+    return typeof Touch == "object"
+    // return !!('ontouchstart' in window);
   })();
 
   // helpers
