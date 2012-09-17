@@ -3,7 +3,9 @@
   "use strict";
 
   $.touchable = (function () {
-    return !!('ontouchstart' in window);
+    // http://modernizr.github.com/Modernizr/touch.html
+    return typeof Touch == "object"
+    // return !!('ontouchstart' in window);
   })();
 
   // helpers

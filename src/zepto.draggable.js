@@ -32,7 +32,6 @@
 
     start: function (e) {
       var offset, zIndex;
-
       if (!draggable) {
         this.curEl = $(e.target);
         offset = this.curEl.offset();

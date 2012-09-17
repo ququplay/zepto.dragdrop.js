@@ -7,7 +7,7 @@ describe("Droppable", function() {
     dropEl = $('<div class="drop"></div>').appendTo('body');
 
     dragEl.css({ top: 0, left: 0 });
-    dropEl.css({ top: 300, left: 300 });
+    dropEl.css({ top: 100, left: 100 });
   });
 
   afterEach(function () {
@@ -20,8 +20,7 @@ describe("Droppable", function() {
 
     dragEl.draggable();
     dropEl.droppable({ drop: callback });
-    dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
-
+    dragEl.simdrag({ x: 20, y: 20 }, { x: 120, y: 120 });
     expect(callback).wasCalled();
   });
 
@@ -36,7 +35,7 @@ describe("Droppable", function() {
         }
       });
 
-      dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
+      dragEl.simdrag({ x: 20, y: 20 }, { x: 120, y: 120 });
     });
   });
 
@@ -47,7 +46,7 @@ describe("Droppable", function() {
       dropEl.droppable();
 
       dropEl.on('droppable:drop', callback);
-      dragEl.simdrag({ x: 20, y: 20 }, { x: 350, y: 350 });
+      dragEl.simdrag({ x: 20, y: 20 }, { x: 120, y: 120 });
       expect(callback).wasCalled();
     });
   });

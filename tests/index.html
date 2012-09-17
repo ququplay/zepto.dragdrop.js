@@ -39,6 +39,7 @@
 
   <script type="text/javascript" src="libs/jasmine-1.2.0/jasmine.js"></script>
   <script type="text/javascript" src="libs/jasmine-1.2.0/jasmine-html.js"></script>
+  <script type="text/javascript" src="libs/console-reporter.js"></script>
   <script type="text/javascript" src="libs/zepto.js"></script>
   <script type="text/javascript" src="libs/zepto.simulate.js"></script>
 
@@ -50,9 +51,9 @@
 
   <!-- include spec files here... -->
   <script type="text/javascript" src="helpers.js"></script>
+
   <script type="text/javascript" src="zepto.draggable_spec.js"></script>
   <script type="text/javascript" src="zepto.droppable_spec.js"></script>
-
   <script type="text/javascript">
     (function() {
 
@@ -60,8 +61,10 @@
       jasmineEnv.updateInterval = 1000;
 
       var htmlReporter = new jasmine.HtmlReporter();
+      window.consoleReporter = new jasmine.ConsoleReporter();
 
       jasmineEnv.addReporter(htmlReporter);
+      jasmineEnv.addReporter(consoleReporter);
 
       jasmineEnv.specFilter = function(spec) {
         return htmlReporter.specFilter(spec);
