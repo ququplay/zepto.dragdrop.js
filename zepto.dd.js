@@ -284,7 +284,7 @@
       if (store) $.each(names, function(){ delete store[camelize(this)] })
     })
   }
-})(Zepto)
+})(Zepto);
 
 (function ($) {
 
