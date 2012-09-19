@@ -39,7 +39,7 @@ Drag supports three callbacks: `start`, `drag`, and `stop`. Start is fired at th
 At the moment drop supports one callback `drop` which fires when draggable element is dropped into droppable element. Drop callback can be used to validate a drop action by returning `true` - successful drop or `false` - unsuccessful drop.
 
     dragEl.draggable({
-      drop: function (e, dragEl, dropEl) {
+      drop: function (e, dragEl, dropEl, pos) {
          // your code here
          return true;
       }
