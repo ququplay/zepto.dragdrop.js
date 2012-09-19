@@ -10,14 +10,14 @@ module.exports = function (grunt) {
     concat: {
       dist: {
         src: src,
-        dest: 'zepto.dd.js'
+        dest: 'zepto.dragdrop.js'
       }
     },
 
     min: {
       dist: {
         src: src,
-        dest: 'zepto.dd.min.js'
+        dest: 'zepto.dragdrop.min.js'
       }
     },
 

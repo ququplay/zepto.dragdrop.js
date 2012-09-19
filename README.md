@@ -6,7 +6,7 @@ Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
 
 ## Install
 
-    <script src="zepto.dd.min.js"></script>
+    <script src="zepto.dragdrop.min.js"></script>
 
 ##Simple Usage
 
