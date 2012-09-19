@@ -58,7 +58,7 @@ It's possible to bind to three different events `draggable:start`, `draggable:dr
 
 ###drop
 
-Droppable emit one event `droppable:drop` when element is successfully dropped.
+Droppable emits one event `droppable:drop` when element is successfully dropped.
 
 ## Options
 ###drag
