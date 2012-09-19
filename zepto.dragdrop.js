@@ -1,12 +1,12 @@
 /**
- * zepto.dragddrop.js v0.1.0 - Drag & Drop for Zepto with touch and mouse events.
+ * zepto.dragdrop.js v0.1.0 - Drag & Drop for Zepto with touch and mouse events.
  *
  * Copyright 2012, Michal Kuklis
  * Dual licensed under the MIT or GPL Version 2 licenses.
  *
  **/
 
-(function ($) {
+;(function ($) {
 
   "use strict";
 
@@ -130,14 +130,14 @@
 })(Zepto);
 
 /**
- * zepto.dd.js v0.1.0 - Drag & Drop for Zepto with touch and mouse events.
+ * zepto.dragdrop.js v0.1.0 - Drag & Drop for Zepto with touch and mouse events.
  *
  * Copyright 2012, Michal Kuklis
  * Dual licensed under the MIT or GPL Version 2 licenses.
  *
  **/
 
-(function ($) {
+;(function ($) {
 
   "use strict";
 
@@ -294,7 +294,7 @@
   }
 })(Zepto);
 
-(function ($) {
+;(function ($) {
 
   "use strict";
 
