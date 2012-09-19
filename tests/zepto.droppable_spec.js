@@ -50,4 +50,23 @@ describe("Droppable", function() {
       expect(callback).wasCalled();
     });
   });
+
+  describe("events", function () {
+    it("should pass dropEl, dragEl and position to drop callback", function () {
+      var fromPos = { x: 20, y: 20 };
+      var toPos = { x: 120, y: 120 };
+
+      dragEl.draggable();
+      dropEl.droppable({
+        drop: function (e, drag, drop, pos) {
+          expect(pos).toEqual(toPos);
+          expect(drag).toEqual(dragEl);
+          expect(drop).toEqual(dropEl);
+        }
+      });
+
+      dragEl.simdrag(fromPos, toPos);
+
+    });
+  });
 });

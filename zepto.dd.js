@@ -147,19 +147,20 @@
     this.ctx = this.opts.context || this.el;
   }
 
-  Droppable.prototype.drop = function (e) {
+  Droppable.prototype.drop = function (e, pos) {
     var isDrop = true;
-    var dragEl = e.el;
+    var dragEl = $(e.el);
 
     // TODO: handle other types of selectors
-    if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
-      isDrop = false;
-    }
+    //if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
+    //   isDrop = false;
+    //}
+
     if (isDrop && this.opts.drop) {
-      isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el);
+      isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el, pos);
     }
 
-    isDrop && $(this.ctx).trigger('droppable:drop', [e, dragEl, this.el]);
+    isDrop && $(this.ctx).trigger('droppable:drop', [e, dragEl, this.el, pos]);
 
     // only revert if element was not dropped
     if (!isDrop && dragEl.data('revert')) {
@@ -180,17 +181,14 @@
   };
 
   function dropOrRevert(e) {
-    var droppable, pos, dragEl, dropEl;
+    var droppable, pos;
+    var dragEl = e.el;
 
-    if (e.el) {
+    if (dragEl) {
       pos = $.getPos(e);
-      dragEl = e.el;
-      dragEl.css({ display: 'none' });
-      dropEl = $.elementFromPoint(pos.x, pos.y);
-      dragEl.css({ display: 'block' });
-      droppable = $(dropEl).data('droppable');
+      droppable = findDroppable(e, pos);
       if (droppable) {
-        droppable.drop(e);
+        droppable.drop(e, pos);
       }
       else if (dragEl.data('revert')){
         Droppable.prototype.revert(dragEl);
@@ -198,6 +196,16 @@
     }
 
     return false;
+  }
+
+  function findDroppable(e, pos) {
+    var droppable, dropEl;
+    var dragEl = e.el;
+
+    dragEl.css({ display: 'none' });
+    dropEl = $.elementFromPoint(pos.x, pos.y);
+    dragEl.css({ display: 'block' });
+    return $(dropEl).data('droppable');
   }
 
   // droppable api
