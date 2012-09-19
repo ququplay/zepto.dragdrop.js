@@ -1,5 +1,5 @@
-[![build status](https://secure.travis-ci.org/mkuklis/zepto.dd.js.png)](http://travis-ci.org/mkuklis/zepto.dd.js)
-# zepto.dd.js
+[![build status](https://secure.travis-ci.org/mkuklis/zepto.dragdrop.js.png)](http://travis-ci.org/mkuklis/zepto.dragdrop.js)
+# zepto.dragdrop.js
 
 Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
 
