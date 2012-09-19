@@ -18,17 +18,19 @@
         <h1>Zepto.dd.js</h1>
         <p>Drag &amp; Drop for Zepto with touch and mouse events.</p>
 
-        <p class="view"><a href="https://github.com/mkuklis/zepto.dd.js">View the Project on GitHub <small>mkuklis/zepto.dd.js</small></a></p>
+        <p class="view"><a href="https://github.com/mkuklis/zepto.dragdrop.js">View the Project on GitHub <small>mkuklis/zepto.dragdrop.js</small></a></p>
 
 
         <ul>
-          <li><a href="https://github.com/mkuklis/zepto.dd.js/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/mkuklis/zepto.dd.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/mkuklis/zepto.dd.js">View On <strong>GitHub</strong></a></li>
+          <li><a href="https://github.com/mkuklis/zepto.dragdrop.js/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mkuklis/zepto.dragdrop.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mkuklis/zepto.dragdrop.js">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
       <section>
-        <h1>zepto.dd.js</h1>
+        <p><a href="http://travis-ci.org/mkuklis/zepto.dragdrop.js"><img src="https://secure.travis-ci.org/mkuklis/zepto.dragdrop.js.png" alt="build status"></a></p>
+
+<h1>zepto.dragdrop.js</h1>
 
 <p>Micro (only 3kb) drag &amp; drop library for Zepto with touch and mouse events.</p>
 
@@ -73,7 +75,7 @@
 <p>At the moment drop supports one callback <code>drop</code> which fires when draggable element is dropped into droppable element. Drop callback can be used to validate a drop action by returning <code>true</code> - successful drop or <code>false</code> - unsuccessful drop.</p>
 
 <pre><code>dragEl.draggable({
-  drop: function (e, dragEl, dropEl) {
+  drop: function (e, dragEl, dropEl, pos) {
      // your code here
      return true;
   }
@@ -106,34 +108,8 @@
 </ul><h3>drop</h3>
 
 <ul>
-<li>selector</li>
 <li>context</li>
-</ul><h2>License:</h2>
-
-<pre>
-(The MIT License)
-
-Copyright (c) 2012 Michal Kuklis
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</pre>
+</ul>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/mkuklis">mkuklis</a></p>
