@@ -14,10 +14,12 @@
 
   function Draggable(el, opts) {
     var eventName = ($.touchable) ? "touchstart" : "mousedown";
-
+    var offset = el.offset();
     this.el = el;
     this.opts = opts || {};
     this.ctx = this.opts.context || this.el;
+    this.left = offset.left;
+    this.top = offset.top;
 
     if (this.opts.selector) {
       this.el.on(eventName, this.opts.selector, $.proxy(this.start, this));
@@ -41,7 +43,9 @@
 
         $(this.ctx).trigger('draggable:start', [e, this.curEl]);
         this.opts.start && this.opts.start.call(this.ctx, this.curEl);
+        this.setPosition(e);
         draggable = this;
+        redraw();
       }
 
       return false;
@@ -53,27 +57,26 @@
         this.setZIndex(-1);
         $(this.ctx).trigger('draggable:end', [e, this.curEl]);
         this.opts.stop && this.opts.stop.call(this.ctx, this.curEl);
+        redraw();
         draggable = null;
       }
 
       return false;
     },
 
-    drag: function (e) {
-      var pos = $.getPos(e);
-      this.setPosition(pos.x, pos.y);
+    drag: function () {
+      this.curEl.css({ left: this.left, top: this.top });
       this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
-
-      return false;
     },
 
-    setPosition: function (x, y) {
+    setPosition: function (e) {
+      var pos = $.getPos(e);
       var h = this.curEl.height();
       var w = this.curEl.width();
       var offset = this.findOffset();
-      var left = x - w / offset;
-      var top = y - h / offset;
-      this.curEl.css({ left: left, top: top });
+      this.left = pos.x - w / offset;
+      this.top = pos.y - h / offset;
+      return false;
     },
 
     setRevert: function (offset) {
@@ -98,6 +101,15 @@
     }
   };
 
+  // helpers
+  function redraw() {
+    if (draggable) {
+      draggable.drag();
+      window.requestAnimationFrame(redraw);
+    }
+    return false;
+  }
+
   // draggable plugin
   $.fn.draggable = function (options) {
     return this.each(function () {
@@ -117,7 +129,7 @@
       switch (e.type) {
         case "mousemove":
         case "touchmove":
-          draggable.drag(e);
+          draggable.setPosition(e);
           break;
         case "mouseup":
         case "touchend":

@@ -43,4 +43,7 @@
     }
   }
 
+   // https://gist.github.com/997619
+  window.requestAnimationFrame = function(a,b){while(a--&&!(b=window["oR0msR0mozR0webkitR0r".split(0)[a]+"equestAnimationFrame"]));return b||function(a){setTimeout(a,15)}}(5);
+
 })(Zepto);
