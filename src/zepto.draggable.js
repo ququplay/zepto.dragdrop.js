@@ -14,12 +14,11 @@
 
   function Draggable(el, opts) {
     var eventName = ($.touchable) ? "touchstart" : "mousedown";
-    var offset = el.offset();
+    var o = el.offset();
     this.el = el;
     this.opts = opts || {};
     this.ctx = this.opts.context || this.el;
-    this.left = offset.left;
-    this.top = offset.top;
+    this.pos = { left: o.left, top: o.top };
 
     if (this.opts.selector) {
       this.el.on(eventName, this.opts.selector, $.proxy(this.start, this));
@@ -65,7 +64,7 @@
     },
 
     drag: function () {
-      this.curEl.css({ left: this.left, top: this.top });
+      this.curEl.css(this.pos);
       this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
     },
 
@@ -74,8 +73,10 @@
       var h = this.curEl.height();
       var w = this.curEl.width();
       var offset = this.findOffset();
-      this.left = pos.x - w / offset;
-      this.top = pos.y - h / offset;
+      this.pos = {
+        left: pos.x - w / offset,
+        top: pos.y - h / offset };
+
       return false;
     },
 

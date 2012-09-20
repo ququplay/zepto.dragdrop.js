@@ -20,12 +20,7 @@
     var isDrop = true;
     var dragEl = $(e.el);
 
-    // TODO: handle other types of selectors
-    //if (this.opts.selector && !this.el.hasClass(this.opts.selector)) {
-    //   isDrop = false;
-    //}
-
-    if (isDrop && this.opts.drop) {
+    if (this.opts.drop) {
       isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el, pos);
     }
 
@@ -49,6 +44,8 @@
     dragEl.css({ left: left, top: top });
   };
 
+
+  // helpers
   function dropOrRevert(e) {
     var droppable, pos;
     var dragEl = e.el;
