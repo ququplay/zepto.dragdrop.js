@@ -2,21 +2,21 @@
 
   "use strict";
 
+  // for testing
+  var phantom = navigator.userAgent.match(/PhantomJS/);
+
   $.touchable = (function () {
     // http://modernizr.github.com/Modernizr/touch.html
-    return typeof Touch == "object"
-    // return !!('ontouchstart' in window);
+    return !!('ontouchstart' in window) && !phantom
   })();
 
   // helpers
   $.getPos = function (e) {
-    var pos, touch;
+    var pos = {}, touch;
 
     if ($.touchable) {
-      if (e.targetTouches.length == 1) {
-        touch = e.targetTouches[0];
-        pos = { x: touch.x, y: touch.y };
-      }
+      touch = (e.targetTouches.length) ? e.targetTouches[0] : e.changedTouches[0];
+      pos = { x: touch.pageX, y: touch.pageY };
     }
     else {
       pos = { x: e.pageX, y: e.pageY };
