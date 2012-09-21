@@ -29,18 +29,20 @@
 
   $.elementFromPoint = function (x, y) {
     var moved = false;
+    var yo = pageYOffset;
+    var xo = pageXOffset;
+    var h = innerHeight;
+    var w = innerWidth;
 
-    if (window.pageYOffset > 0) {
-      moved = (doc.elementFromPoint(0, window.pageYOffset + window.innerHeight -1) === null);
-    } else if (window.pageXOffset > 0) {
-      moved = (doc.elementFromPoint(window.pageXOffset + window.innerWidth -1, 0) === null);
+    if (yo > 0) {
+      moved = (!doc.elementFromPoint(0, yo + h - 1));
+    } else if (xo > 0) {
+      moved = (!doc.elementFromPoint(xo + w - 1, 0));
     }
 
-    if (moved) {
-      return doc.elementFromPoint(x - window.pageXOffset, y - window.pageYOffset);
-    } else {
-      return doc.elementFromPoint(x, y);
-    }
+    return (moved) ?
+      doc.elementFromPoint(x - xo, y - yo) :
+      doc.elementFromPoint(x, y);
   }
 
    // https://gist.github.com/997619
