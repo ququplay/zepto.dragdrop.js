@@ -29,10 +29,10 @@
 
   $.elementFromPoint = function (x, y) {
     var moved = false;
-    var yo = pageYOffset;
-    var xo = pageXOffset;
-    var h = innerHeight;
-    var w = innerWidth;
+    var yo = window.pageYOffset;
+    var xo = window.pageXOffset;
+    var h = window.innerHeight;
+    var w = window.innerWidth;
 
     if (yo > 0) {
       moved = (!doc.elementFromPoint(0, yo + h - 1));

@@ -47,7 +47,8 @@
         redraw();
       }
 
-      return false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     stop: function (e) {
@@ -60,7 +61,8 @@
         draggable = null;
       }
 
-      return false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     drag: function () {
@@ -77,7 +79,8 @@
         left: pos.x - w / offset,
         top: pos.y - h / offset };
 
-      return false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     setRevert: function (offset) {
@@ -137,6 +140,9 @@
           draggable.stop(e);
           break;
       }
+
+      e.preventDefault();
+      e.stopPropagation();
     });
   });
 

@@ -61,7 +61,8 @@
       }
     }
 
-    return false;
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   function findDroppable(e, pos) {

@@ -47,7 +47,8 @@
         redraw();
       }
 
-      return false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     stop: function (e) {
@@ -60,7 +61,8 @@
         draggable = null;
       }
 
-      return false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     drag: function () {
@@ -77,7 +79,8 @@
         left: pos.x - w / offset,
         top: pos.y - h / offset };
 
-      return false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     setRevert: function (offset) {
@@ -137,6 +140,9 @@
           draggable.stop(e);
           break;
       }
+
+      e.preventDefault();
+      e.stopPropagation();
     });
   });
 
@@ -205,7 +211,8 @@
       }
     }
 
-    return false;
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   function findDroppable(e, pos) {
@@ -335,18 +342,20 @@
 
   $.elementFromPoint = function (x, y) {
     var moved = false;
+    var yo = window.pageYOffset;
+    var xo = window.pageXOffset;
+    var h = window.innerHeight;
+    var w = window.innerWidth;
 
-    if (window.pageYOffset > 0) {
-      moved = (doc.elementFromPoint(0, window.pageYOffset + window.innerHeight -1) === null);
-    } else if (window.pageXOffset > 0) {
-      moved = (doc.elementFromPoint(window.pageXOffset + window.innerWidth -1, 0) === null);
+    if (yo > 0) {
+      moved = (!doc.elementFromPoint(0, yo + h - 1));
+    } else if (xo > 0) {
+      moved = (!doc.elementFromPoint(xo + w - 1, 0));
     }
 
-    if (moved) {
-      return doc.elementFromPoint(x - window.pageXOffset, y - window.pageYOffset);
-    } else {
-      return doc.elementFromPoint(x, y);
-    }
+    return (moved) ?
+      doc.elementFromPoint(x - xo, y - yo) :
+      doc.elementFromPoint(x, y);
   }
 
    // https://gist.github.com/997619
