@@ -40,7 +40,7 @@
         this.setRevert(offset);
         this.setZIndex(1);
 
-        $(this.ctx).trigger('draggable:start', [e, this.curEl]);
+        this.ctx.trigger && this.ctx.trigger('draggable:start', [e, this.curEl]);
         this.opts.start && this.opts.start.call(this.ctx, this.curEl);
         this.setPosition(e);
         draggable = this;
@@ -55,7 +55,7 @@
       if (draggable) {
         e.el = this.curEl;
         this.setZIndex(-1);
-        $(this.ctx).trigger('draggable:end', [e, this.curEl]);
+        this.ctx.trigger && this.ctx.trigger('draggable:end', [e, this.curEl]);
         this.opts.stop && this.opts.stop.call(this.ctx, this.curEl);
         redraw();
         draggable = null;

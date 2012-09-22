@@ -24,7 +24,7 @@
       isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el, pos);
     }
 
-    isDrop && $(this.ctx).trigger('droppable:drop', [e, dragEl, this.el, pos]);
+    isDrop && this.ctx.trigger && this.ctx.trigger('droppable:drop', [e, dragEl, this.el, pos]);
 
     // only revert if element was not dropped
     if (!isDrop && dragEl.data('revert')) {
