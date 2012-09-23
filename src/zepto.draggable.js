@@ -6,7 +6,7 @@
  *
  **/
 
-;(function ($) {
+(function ($) {
 
   "use strict";
 

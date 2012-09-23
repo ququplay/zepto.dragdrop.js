@@ -6,7 +6,7 @@
  *
  **/
 
-;(function ($) {
+(function ($) {
 
   "use strict";
 
@@ -156,7 +156,7 @@
  *
  **/
 
-;(function ($) {
+(function ($) {
 
   "use strict";
 
@@ -311,7 +311,7 @@
   }
 })(Zepto);
 
-;(function ($) {
+(function ($) {
 
   "use strict";
 
