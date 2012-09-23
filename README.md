@@ -1,7 +1,7 @@
 [![build status](https://secure.travis-ci.org/mkuklis/zepto.dragdrop.js.png)](http://travis-ci.org/mkuklis/zepto.dragdrop.js)
 # zepto.dragdrop.js
 
-Micro (only 3kb) drag & drop library for Zepto with touch and mouse events.
+Micro (only 4kb) drag & drop library for Zepto with touch and mouse events.
 
 
 ## Install
@@ -61,16 +61,29 @@ It's possible to bind to three different events `draggable:start`, `draggable:dr
 Droppable emits one event `droppable:drop` when element is successfully dropped.
 
 ## Options
+
 ###drag
 
- - selector
- - context
- - revert
+####selector (class name)
+
+Delegates to elements defined by selector instead of the main object.
+This is useful if you have a lot of draggable elements. Instead of binding to each element you can 
+setup draggable to their parent and delegate to dragging elements by providing selector.
+
+####context
+
+Changes context in which callbacks will be executed.
+
+####revert
+
+When set to `true` draggable element goes back to its starting position in case when drop fails.
 
 ###drop
 
- - selector
- - context
+####context
+
+Changes context in which callbacks will be executed.
+
 
 ##License:
 <pre>
