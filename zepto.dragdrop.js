@@ -15,16 +15,16 @@
   function Draggable(el, opts) {
     var eventName = ($.touchable) ? "touchstart" : "mousedown";
     var o = el.offset();
-    this.el = el;
+
     this.opts = opts || {};
-    this.ctx = this.opts.context || this.el;
+    this.ctx = this.opts.context || el;
     this.pos = { left: o.left, top: o.top };
 
     if (this.opts.selector) {
-      this.el.on(eventName, this.opts.selector, $.proxy(this.start, this));
+      el.on(eventName, this.opts.selector, $.proxy(this.start, this));
     }
     else {
-      this.el.on(eventName, $.proxy(this.start, this));
+      el.on(eventName, $.proxy(this.start, this));
     }
   }
 
@@ -39,9 +39,9 @@
         this.curEl.data(offset);
         this.setRevert(offset);
         this.setZIndex(1);
-
-        this.ctx.trigger && this.ctx.trigger('draggable:start', [e, this.curEl]);
         this.opts.start && this.opts.start.call(this.ctx, this.curEl);
+        this.curEl.trigger('draggable:start', [e, this.curEl]);
+
         this.setPosition(e);
         draggable = this;
         redraw();
@@ -55,8 +55,9 @@
       if (draggable) {
         e.el = this.curEl;
         this.setZIndex(-1);
-        this.ctx.trigger && this.ctx.trigger('draggable:end', [e, this.curEl]);
         this.opts.stop && this.opts.stop.call(this.ctx, this.curEl);
+        this.curEl.trigger('draggable:end', [e, this.curEl]);
+
         redraw();
         draggable = null;
       }
@@ -174,7 +175,7 @@
       isDrop &= this.opts.drop.call(this.ctx, e, dragEl, this.el, pos);
     }
 
-    isDrop && this.ctx.trigger && this.ctx.trigger('droppable:drop', [e, dragEl, this.el, pos]);
+    isDrop && this.el.trigger('droppable:drop', [e, dragEl, this.el, pos]);
 
     // only revert if element was not dropped
     if (!isDrop && dragEl.data('revert')) {
