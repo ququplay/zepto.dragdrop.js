@@ -30,11 +30,11 @@
       <section>
         <h1>zepto.dragdrop.js</h1>
 
-<p>Micro (only 3kb) drag &amp; drop library for Zepto with touch and mouse events.</p>
+<p>Micro (only 4kb) drag &amp; drop library for Zepto with touch and mouse events.</p>
 
 <h2>Install</h2>
 
-<pre><code>&lt;script src="zepto.dd.min.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="zepto.dragdrop.min.js"&gt;&lt;/script&gt;
 </code></pre>
 
 <h2>Simple Usage</h2>
@@ -93,21 +93,31 @@
 
 <h3>drop</h3>
 
-<p>Droppable emit one event <code>droppable:drop</code> when element is successfully dropped.</p>
+<p>Droppable emits one event <code>droppable:drop</code> when element is successfully dropped.</p>
 
 <h2>Options</h2>
 
 <h3>drag</h3>
 
-<ul>
-<li>selector</li>
-<li>context</li>
-<li>revert</li>
-</ul><h3>drop</h3>
+<h4>selector (class name)</h4>
 
-<ul>
-<li>context</li>
-</ul>
+<p>Delegates to elements defined by selector instead of the main object.
+This is useful if you have a lot of draggable elements. Instead of binding to each element you can 
+setup draggable to their parent and delegate to dragging elements by providing selector.</p>
+
+<h4>context</h4>
+
+<p>Changes context in which callbacks will be executed.</p>
+
+<h4>revert</h4>
+
+<p>When set to <code>true</code> draggable element goes back to its starting position in case when drop fails.</p>
+
+<h3>drop</h3>
+
+<h4>context</h4>
+
+<p>Changes context in which callbacks will be executed.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/mkuklis">mkuklis</a></p>
