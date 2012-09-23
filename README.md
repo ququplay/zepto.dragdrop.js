@@ -1,7 +1,7 @@
 [![build status](https://secure.travis-ci.org/mkuklis/zepto.dragdrop.js.png)](http://travis-ci.org/mkuklis/zepto.dragdrop.js)
 # zepto.dragdrop.js
 
-Micro (only 4kb) drag & drop library for Zepto with touch and mouse events.
+Micro (only 4kb) drag & drop library for [Zepto](http://zeptojs.com/) with touch and mouse events.
 
 
 ## Install
