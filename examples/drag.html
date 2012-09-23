@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    .drag {
+      background-color: #ed5e2f;
+      color: #fff;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+    }
+  </style>
+  <script src="../tests/libs/zepto.js"></script>
+  <script src="../zepto.dragdrop.js"></script>
+  <script>
+    $(function () {
+      $('#drag').draggable();
+    });
+  </script>
+</head>
+<body>
+  <div id="drag" class="drag">drag me</div>
+</body>
+</html>
