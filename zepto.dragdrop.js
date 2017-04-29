@@ -6,7 +6,7 @@
  *
  **/
 
-(function ($) {
+(($ => {
 
   "use strict";
 
@@ -31,8 +31,9 @@
   Draggable.prototype = {
     constructor: Draggable,
 
-    start: function (e) {
-      var offset, zIndex;
+    start(e) {
+      var offset;
+      var zIndex;
       if (!draggable) {
         this.curEl = $(e.currentTarget);
         offset = this.curEl.offset();
@@ -51,7 +52,7 @@
       e.stopPropagation();
     },
 
-    stop: function (e) {
+    stop(e) {
       if (draggable) {
         e.el = this.curEl;
         this.setZIndex(-1);
@@ -66,12 +67,12 @@
       e.stopPropagation();
     },
 
-    drag: function () {
+    drag() {
       this.curEl.css(this.pos);
       this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
     },
 
-    setPosition: function (e) {
+    setPosition(e) {
       var pos = $.getPos(e);
       var h = this.curEl.height();
       var w = this.curEl.width();
@@ -84,7 +85,7 @@
       e.stopPropagation();
     },
 
-    setRevert: function (offset) {
+    setRevert(offset) {
       if (this.opts.revert && !this.curEl.data('revert')) {
         this.curEl.data({
           rtop: offset.top,
@@ -93,14 +94,14 @@
       }
     },
 
-    findOffset: function () {
+    findOffset() {
       var ow = this.curEl.data('width');
       var nw = this.curEl.width();
 
       return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
     },
 
-    setZIndex: function (val) {
+    setZIndex(val) {
       var zIndex = parseInt(this.curEl.css('z-index'), 10);
       this.curEl.css('z-index', zIndex + val);
     }
@@ -127,9 +128,9 @@
     });
   }
 
-  $(function () {
+  $(() => {
     //TODO: support unbind
-    $(document).on("mousemove touchmove mouseup touchend", function (e) {
+    $(document).on("mousemove touchmove mouseup touchend", e => {
       if (!draggable) return;
       switch (e.type) {
         case "mousemove":
@@ -147,7 +148,7 @@
     });
   });
 
-})(Zepto);
+}))(Zepto);
 
 /**
  * zepto.dragdrop.js v0.1.1 - Drag & Drop for Zepto with touch and mouse events.
@@ -157,7 +158,7 @@
  *
  **/
 
-(function ($) {
+(($ => {
 
   "use strict";
 
@@ -183,7 +184,7 @@
     }
   };
 
-  Droppable.prototype.revert = function (dragEl) {
+  Droppable.prototype.revert = dragEl => {
     var left = dragEl.data('rleft');
     var top = dragEl.data('rtop');
     var rev = dragEl.data('revert');
@@ -192,13 +193,14 @@
       rev.call(dragEl);
     }
 
-    dragEl.css({ left: left, top: top });
+    dragEl.css({ left, top });
   };
 
 
   // helpers
   function dropOrRevert(e) {
-    var droppable, pos;
+    var droppable;
+    var pos;
     var dragEl = e.el;
 
     if (dragEl) {
@@ -217,7 +219,8 @@
   }
 
   function findDroppable(e, pos) {
-    var droppable, dropEl;
+    var droppable;
+    var dropEl;
     var dragEl = e.el;
 
     dragEl.css({ display: 'none' });
@@ -239,11 +242,11 @@
   };
 
   // bind mouse/touch event
-  $(function () {
+  $(() => {
     $(document).on("mouseup touchend", dropOrRevert);
   });
 
-})(Zepto);
+}))(Zepto);
 
 //     Zepto.js
 //     (c) 2010-2012 Thomas Fuchs
@@ -251,16 +254,19 @@
 
 // The following code is heavily inspired by jQuery's $.fn.data()
 
-;(function($) {
-  var data = {}, dataAttr = $.fn.data, camelize = $.zepto.camelize,
-    exp = $.expando = 'Zepto' + (+new Date())
+;(($ => {
+  var data = {};
+  var dataAttr = $.fn.data;
+  var camelize = $.zepto.camelize;
+  var exp = $.expando = 'Zepto' + (+new Date());
 
   // Get value from node:
   // 1. first try key as given,
   // 2. then try camelized key,
   // 3. fall back to reading "data-*" attribute.
   function getData(node, name) {
-    var id = node[exp], store = id && data[id]
+    var id = node[exp];
+    var store = id && data[id];
     if (name === undefined) return store || setData(node)
     else {
       if (store) {
@@ -274,8 +280,8 @@
 
   // Store value under camelized key on node
   function setData(node, name, value) {
-    var id = node[exp] || (node[exp] = ++$.uuid),
-      store = data[id] || (data[id] = attributeData(node))
+    var id = node[exp] || (node[exp] = ++$.uuid);
+    var store = data[id] || (data[id] = attributeData(node));
     if (name !== undefined) store[camelize(name)] = value
     return store
   }
@@ -283,7 +289,7 @@
   // Read all "data-*" attributes from a node
   function attributeData(node) {
     var store = {}
-    $.each(node.attributes, function(i, attr){
+    $.each(node.attributes, (i, attr) => {
       if (attr.name.indexOf('data-') === 0)
         store[camelize(attr.name.replace('data-', ''))] = attr.value
     })
@@ -294,39 +300,39 @@
     return value === undefined ?
       // set multiple values via object
       $.isPlainObject(name) ?
-        this.each(function(i, node){
-          $.each(name, function(key, value){ setData(node, key, value) })
+        this.each((i, node) => {
+          $.each(name, (key, value) => { setData(node, key, value) })
         }) :
         // get value from first element
         this.length === 0 ? undefined : getData(this[0], name) :
       // set value on all elements
-      this.each(function(){ setData(this, name, value) })
+      this.each(function(){ setData(this, name, value) });
   }
 
   $.fn.removeData = function(names) {
     if (typeof names == 'string') names = names.split(/\s+/)
     return this.each(function(){
-      var id = this[exp], store = id && data[id]
+      var id = this[exp];
+      var store = id && data[id];
       if (store) $.each(names, function(){ delete store[camelize(this)] })
-    })
+    });
   }
-})(Zepto);
+}))(Zepto);
 
-(function ($) {
+(($ => {
 
   "use strict";
 
   // for testing
   var phantom = navigator.userAgent.match(/PhantomJS/);
 
-  $.touchable = (function () {
-    // http://modernizr.github.com/Modernizr/touch.html
-    return !!('ontouchstart' in window) && !phantom
-  })();
+  $.touchable = ((() => // http://modernizr.github.com/Modernizr/touch.html
+  !!('ontouchstart' in window) && !phantom))();
 
   // helpers
-  $.getPos = function (e) {
-    var pos = {}, touch;
+  $.getPos = e => {
+    var pos = {};
+    var touch;
 
     if ($.touchable) {
       touch = (e.targetTouches.length) ? e.targetTouches[0] : e.changedTouches[0];
@@ -341,7 +347,7 @@
 
   var doc = document;
 
-  $.elementFromPoint = function (x, y) {
+  $.elementFromPoint = (x, y) => {
     var moved = false;
     var yo = window.pageYOffset;
     var xo = window.pageXOffset;
@@ -360,6 +366,6 @@
   }
 
    // https://gist.github.com/997619
-  window.requestAnimationFrame = function(a,b){while(a--&&!(b=window["oR0msR0mozR0webkitR0r".split(0)[a]+"equestAnimationFrame"]));return b||function(a){setTimeout(a,15)}}(5);
+  window.requestAnimationFrame = ((a, b) => {while(a--&&!(b=window["oR0msR0mozR0webkitR0r".split(0)[a]+"equestAnimationFrame"]));return b||(a => {setTimeout(a,15)});})(5);
 
-})(Zepto);
+}))(Zepto);

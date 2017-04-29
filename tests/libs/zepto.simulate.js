@@ -1,4 +1,4 @@
-(function ($) {
+(($ => {
 
   var matchers = {
     'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
@@ -64,4 +64,4 @@
       this.dispatchEvent(event);
     });
   }
-})(Zepto);
+}))(Zepto);

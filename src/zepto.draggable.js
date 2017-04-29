@@ -6,7 +6,7 @@
  *
  **/
 
-(function ($) {
+(($ => {
 
   "use strict";
 
@@ -31,8 +31,9 @@
   Draggable.prototype = {
     constructor: Draggable,
 
-    start: function (e) {
-      var offset, zIndex;
+    start(e) {
+      var offset;
+      var zIndex;
       if (!draggable) {
         this.curEl = $(e.currentTarget);
         offset = this.curEl.offset();
@@ -51,7 +52,7 @@
       e.stopPropagation();
     },
 
-    stop: function (e) {
+    stop(e) {
       if (draggable) {
         e.el = this.curEl;
         this.setZIndex(-1);
@@ -66,12 +67,12 @@
       e.stopPropagation();
     },
 
-    drag: function () {
+    drag() {
       this.curEl.css(this.pos);
       this.opts.drag && this.opts.drag.call(this.ctx, this.curEl);
     },
 
-    setPosition: function (e) {
+    setPosition(e) {
       var pos = $.getPos(e);
       var h = this.curEl.height();
       var w = this.curEl.width();
@@ -84,7 +85,7 @@
       e.stopPropagation();
     },
 
-    setRevert: function (offset) {
+    setRevert(offset) {
       if (this.opts.revert && !this.curEl.data('revert')) {
         this.curEl.data({
           rtop: offset.top,
@@ -93,14 +94,14 @@
       }
     },
 
-    findOffset: function () {
+    findOffset() {
       var ow = this.curEl.data('width');
       var nw = this.curEl.width();
 
       return  (ow > nw) ? 2 * ow / nw : 2 * nw / ow;
     },
 
-    setZIndex: function (val) {
+    setZIndex(val) {
       var zIndex = parseInt(this.curEl.css('z-index'), 10);
       this.curEl.css('z-index', zIndex + val);
     }
@@ -127,9 +128,9 @@
     });
   }
 
-  $(function () {
+  $(() => {
     //TODO: support unbind
-    $(document).on("mousemove touchmove mouseup touchend", function (e) {
+    $(document).on("mousemove touchmove mouseup touchend", e => {
       if (!draggable) return;
       switch (e.type) {
         case "mousemove":
@@ -147,4 +148,4 @@
     });
   });
 
-})(Zepto);
+}))(Zepto);

@@ -1,6 +1,9 @@
-var PhantomJasmineRunner, address, page, runner;
+var PhantomJasmineRunner;
+var address;
+var page;
+var runner;
 
-PhantomJasmineRunner = (function() {
+PhantomJasmineRunner = ((() => {
 
   function PhantomJasmineRunner(page, exit_func) {
     this.page = page;
@@ -10,9 +13,7 @@ PhantomJasmineRunner = (function() {
   }
 
   PhantomJasmineRunner.prototype.get_status = function() {
-    return this.page.evaluate(function() {
-      return consoleReporter.status;
-    });
+    return this.page.evaluate(() => consoleReporter.status);
   };
 
   PhantomJasmineRunner.prototype.terminate = function() {
@@ -28,7 +29,7 @@ PhantomJasmineRunner = (function() {
 
   return PhantomJasmineRunner;
 
-})();
+}))();
 
 if (phantom.args.length === 0) {
   console.log("Need a url as the argument");
@@ -39,7 +40,7 @@ page = new WebPage();
 
 runner = new PhantomJasmineRunner(page);
 
-page.onConsoleMessage = function(msg) {
+page.onConsoleMessage = msg => {
   console.log(msg);
   if (msg === "ConsoleReporter finished") {
     return runner.terminate();
@@ -48,7 +49,7 @@ page.onConsoleMessage = function(msg) {
 
 address = phantom.args[0];
 
-page.open(address, function(status) {
+page.open(address, status => {
   if (status !== "success") {
     console.log("can't load the address!");
     return phantom.exit(1);

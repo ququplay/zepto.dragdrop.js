@@ -6,7 +6,7 @@
  *
  **/
 
-(function ($) {
+(($ => {
 
   "use strict";
 
@@ -32,7 +32,7 @@
     }
   };
 
-  Droppable.prototype.revert = function (dragEl) {
+  Droppable.prototype.revert = dragEl => {
     var left = dragEl.data('rleft');
     var top = dragEl.data('rtop');
     var rev = dragEl.data('revert');
@@ -41,13 +41,14 @@
       rev.call(dragEl);
     }
 
-    dragEl.css({ left: left, top: top });
+    dragEl.css({ left, top });
   };
 
 
   // helpers
   function dropOrRevert(e) {
-    var droppable, pos;
+    var droppable;
+    var pos;
     var dragEl = e.el;
 
     if (dragEl) {
@@ -66,7 +67,8 @@
   }
 
   function findDroppable(e, pos) {
-    var droppable, dropEl;
+    var droppable;
+    var dropEl;
     var dragEl = e.el;
 
     dragEl.css({ display: 'none' });
@@ -88,8 +90,8 @@
   };
 
   // bind mouse/touch event
-  $(function () {
+  $(() => {
     $(document).on("mouseup touchend", dropOrRevert);
   });
 
-})(Zepto);
+}))(Zepto);

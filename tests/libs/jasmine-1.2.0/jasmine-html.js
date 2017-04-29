@@ -26,7 +26,7 @@ jasmine.HtmlReporterHelpers.createDom = function(type, attrs, childrenVarArgs) {
   return el;
 };
 
-jasmine.HtmlReporterHelpers.getSpecStatus = function(child) {
+jasmine.HtmlReporterHelpers.getSpecStatus = child => {
   var results = child.results();
   var status = results.passed() ? 'passed' : 'failed';
   if (results.skipped) {
@@ -52,7 +52,7 @@ jasmine.HtmlReporterHelpers.appendToSummary = function(child, childElement) {
 };
 
 
-jasmine.HtmlReporterHelpers.addHelpers = function(ctor) {
+jasmine.HtmlReporterHelpers.addHelpers = ctor => {
   for(var fn in jasmine.HtmlReporterHelpers) {
     ctor.prototype[fn] = jasmine.HtmlReporterHelpers[fn];
   }
@@ -69,7 +69,7 @@ jasmine.HtmlReporter = function(_doc) {
   // Jasmine Reporter Public Interface
   self.logRunningSpecs = false;
 
-  self.reportRunnerStarting = function(runner) {
+  self.reportRunnerStarting = runner => {
     var specs = runner.specs() || [];
 
     if (specs.length == 0) {
@@ -83,36 +83,36 @@ jasmine.HtmlReporter = function(_doc) {
     reporterView.addSpecs(specs, self.specFilter);
   };
 
-  self.reportRunnerResults = function(runner) {
+  self.reportRunnerResults = runner => {
     reporterView && reporterView.complete();
   };
 
-  self.reportSuiteResults = function(suite) {
+  self.reportSuiteResults = suite => {
     reporterView.suiteComplete(suite);
   };
 
-  self.reportSpecStarting = function(spec) {
+  self.reportSpecStarting = spec => {
     if (self.logRunningSpecs) {
       self.log('>> Jasmine Running ' + spec.suite.description + ' ' + spec.description + '...');
     }
   };
 
-  self.reportSpecResults = function(spec) {
+  self.reportSpecResults = spec => {
     reporterView.specComplete(spec);
   };
 
-  self.log = function() {
+  self.log = function(...args) {
     var console = jasmine.getGlobal().console;
     if (console && console.log) {
       if (console.log.apply) {
-        console.log.apply(console, arguments);
+        console.log(...args);
       } else {
-        console.log(arguments); // ie fix: console.log.apply doesn't exist on ie
+        console.log(args); // ie fix: console.log.apply doesn't exist on ie
       }
     }
   };
 
-  self.specFilter = function(spec) {
+  self.specFilter = spec => {
     if (!focusedSpecName()) {
       return true;
     }
@@ -172,11 +172,11 @@ jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter);jasmine.HtmlReporte
       ' | ',
       this.detailsMenuItem = this.createDom('a', {className: 'detailsMenuItem', href: "#"}, '0 failing'));
 
-    this.summaryMenuItem.onclick = function() {
+    this.summaryMenuItem.onclick = () => {
       dom.reporter.className = dom.reporter.className.replace(/ showDetails/g, '');
     };
 
-    this.detailsMenuItem.onclick = function() {
+    this.detailsMenuItem.onclick = () => {
       showDetails();
     };
   };
@@ -455,7 +455,8 @@ jasmine.TrivialReporter.prototype.createDom = function(type, attrs, childrenVarA
 };
 
 jasmine.TrivialReporter.prototype.reportRunnerStarting = function(runner) {
-  var showPassed, showSkipped;
+  var showPassed;
+  var showSkipped;
 
   this.outerDiv = this.createDom('div', { id: 'TrivialReporter', className: 'jasmine_reporter' },
       this.createDom('div', { className: 'banner' },
@@ -496,7 +497,7 @@ jasmine.TrivialReporter.prototype.reportRunnerStarting = function(runner) {
   this.startedAt = new Date();
 
   var self = this;
-  showPassed.onclick = function(evt) {
+  showPassed.onclick = evt => {
     if (showPassed.checked) {
       self.outerDiv.className += ' show-passed';
     } else {
@@ -504,7 +505,7 @@ jasmine.TrivialReporter.prototype.reportRunnerStarting = function(runner) {
     }
   };
 
-  showSkipped.onclick = function(evt) {
+  showSkipped.onclick = evt => {
     if (showSkipped.checked) {
       self.outerDiv.className += ' show-skipped';
     } else {
@@ -586,13 +587,13 @@ jasmine.TrivialReporter.prototype.reportSpecResults = function(spec) {
   this.suiteDivs[spec.suite.id].appendChild(specDiv);
 };
 
-jasmine.TrivialReporter.prototype.log = function() {
+jasmine.TrivialReporter.prototype.log = function(...args) {
   var console = jasmine.getGlobal().console;
   if (console && console.log) {
     if (console.log.apply) {
-      console.log.apply(console, arguments);
+      console.log(...args);
     } else {
-      console.log(arguments); // ie fix: console.log.apply doesn't exist on ie
+      console.log(args); // ie fix: console.log.apply doesn't exist on ie
     }
   }
 };
