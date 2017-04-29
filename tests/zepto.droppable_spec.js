@@ -1,8 +1,8 @@
-describe("Droppable", function() {
+describe("Droppable", () => {
+  var dragEl;
+  var dropEl;
 
-  var dragEl, dropEl;
-
-  beforeEach(function () {
+  beforeEach(() => {
     dragEl = $('<div class="drag"></div>').appendTo('body');
     dropEl = $('<div class="drop"></div>').appendTo('body');
 
@@ -10,12 +10,12 @@ describe("Droppable", function() {
     dropEl.css({ top: 100, left: 100 });
   });
 
-  afterEach(function () {
+  afterEach(() => {
     dragEl.remove();
     dropEl.remove();
   });
 
-  it("should drop element", function () {
+  it("should drop element", () => {
     var callback = jasmine.createSpy();
 
     dragEl.draggable();
@@ -24,13 +24,13 @@ describe("Droppable", function() {
     expect(callback).wasCalled();
   });
 
-  describe("options", function() {
-    it("should execute in different context", function () {
+  describe("options", () => {
+    it("should execute in different context", () => {
       var ctx = {};
       dragEl.draggable();
       dropEl.droppable({
         context: ctx,
-        drop: function () {
+        drop() {
           expect(this).toBe(ctx);
         }
       });
@@ -39,8 +39,8 @@ describe("Droppable", function() {
     });
   });
 
-  describe("events", function () {
-    it("should trigger droppable:drop event", function () {
+  describe("events", () => {
+    it("should trigger droppable:drop event", () => {
       var callback = jasmine.createSpy();
       dragEl.draggable();
       dropEl.droppable();
@@ -51,14 +51,14 @@ describe("Droppable", function() {
     });
   });
 
-  describe("events", function () {
-    it("should pass dropEl, dragEl and position to drop callback", function () {
+  describe("events", () => {
+    it("should pass dropEl, dragEl and position to drop callback", () => {
       var fromPos = { x: 20, y: 20 };
       var toPos = { x: 120, y: 120 };
 
       dragEl.draggable();
       dropEl.droppable({
-        drop: function (e, drag, drop, pos) {
+        drop(e, drag, drop, pos) {
           expect(pos).toEqual(toPos);
           expect(drag).toEqual(dragEl);
           expect(drop).toEqual(dropEl);

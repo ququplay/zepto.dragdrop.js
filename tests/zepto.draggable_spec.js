@@ -1,17 +1,17 @@
-describe("Draggable", function() {
+describe("Draggable", () => {
 
   var dragEl;
 
-  beforeEach(function () {
+  beforeEach(() => {
     dragEl = $('<div class="drag"></div>').appendTo('body');
     dragEl.css({ top: 0, left: 0 });
   });
 
-  afterEach(function () {
+  afterEach(() => {
     dragEl.remove();
   });
 
-  it("should drag element to a new position", function () {
+  it("should drag element to a new position", () => {
     dragEl.draggable();
     dragEl.simdrag({ x: 20, y: 20 }, { x: 500, y: 300 });
     var o = dragEl.offset();
@@ -19,22 +19,22 @@ describe("Draggable", function() {
     expect(o.top).toBe(280);
   });
 
-  describe("callbacks", function () {
-    it("should call start callback", function () {
+  describe("callbacks", () => {
+    it("should call start callback", () => {
       var callback = jasmine.createSpy();
       dragEl.draggable({ start: callback });
       dragEl.simdrag({ x: 20, y: 20 }, { x: 500, y: 300 });
       expect(callback).wasCalledWith(dragEl);
     });
 
-    it("should call stop callback", function () {
+    it("should call stop callback", () => {
       var callback = jasmine.createSpy();
       dragEl.draggable({ stop: callback });
       dragEl.simdrag({ x: 20, y: 20 }, { x: 500, y: 300 });
       expect(callback).wasCalledWith(dragEl);
     });
 
-    it("should call drag callback", function () {
+    it("should call drag callback", () => {
       var callback = jasmine.createSpy();
       dragEl.draggable({ drag: callback });
       dragEl.simdrag({ x: 20, y: 20 }, { x: 500, y: 300 });
@@ -42,8 +42,8 @@ describe("Draggable", function() {
     });
   });
 
-  describe("events", function () {
-    it("should trigger draggable:start event", function () {
+  describe("events", () => {
+    it("should trigger draggable:start event", () => {
       var callback = jasmine.createSpy();
       dragEl.draggable();
       dragEl.on('draggable:start', callback);
@@ -51,7 +51,7 @@ describe("Draggable", function() {
       expect(callback).wasCalled();
     });
 
-    it("should trigger draggable:end event", function () {
+    it("should trigger draggable:end event", () => {
       var callback = jasmine.createSpy();
       dragEl.draggable();
       dragEl.on('draggable:end', callback);
@@ -60,8 +60,8 @@ describe("Draggable", function() {
     });
   });
 
-  describe("options", function() {
-    it("should delegate drag to selector element", function () {
+  describe("options", () => {
+    it("should delegate drag to selector element", () => {
       $('body').draggable({ selector: ".drag" });
       dragEl.simdrag({ x: 20, y: 20 }, { x: 300, y: 300 });
       var o = dragEl.offset();
@@ -69,7 +69,7 @@ describe("Draggable", function() {
       expect(o.top).toBe(280);
     });
 
-    it("should revert dragable to original position", function () {
+    it("should revert dragable to original position", () => {
       // set starting position
       dragEl.css({ top: 200, left: 200 });
       dragEl.draggable({
@@ -83,18 +83,18 @@ describe("Draggable", function() {
     });
 
 
-    it("should execute in different context", function () {
+    it("should execute in different context", () => {
       var ctx = {};
       var callback = jasmine.createSpy();
       dragEl.draggable({
         context: ctx,
-        start: function () {
+        start() {
           expect(this).toBe(ctx);
         },
-        drag: function () {
+        drag() {
           expect(this).toBe(ctx);
         },
-        stop: function () {
+        stop() {
           expect(this).toBe(ctx);
         }
       });

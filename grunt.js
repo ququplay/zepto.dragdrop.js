@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = grunt => {
 
   var src = [
     "src/zepto.draggable.js",
@@ -9,14 +9,14 @@ module.exports = function (grunt) {
   grunt.initConfig({
     concat: {
       dist: {
-        src: src,
+        src,
         dest: 'zepto.dragdrop.js'
       }
     },
 
     min: {
       dist: {
-        src: src,
+        src,
         dest: 'zepto.dragdrop.min.js'
       }
     },

@@ -1,18 +1,17 @@
-(function ($) {
+(($ => {
 
   "use strict";
 
   // for testing
   var phantom = navigator.userAgent.match(/PhantomJS/);
 
-  $.touchable = (function () {
-    // http://modernizr.github.com/Modernizr/touch.html
-    return !!('ontouchstart' in window) && !phantom
-  })();
+  $.touchable = ((() => // http://modernizr.github.com/Modernizr/touch.html
+  !!('ontouchstart' in window) && !phantom))();
 
   // helpers
-  $.getPos = function (e) {
-    var pos = {}, touch;
+  $.getPos = e => {
+    var pos = {};
+    var touch;
 
     if ($.touchable) {
       touch = (e.targetTouches.length) ? e.targetTouches[0] : e.changedTouches[0];
@@ -27,7 +26,7 @@
 
   var doc = document;
 
-  $.elementFromPoint = function (x, y) {
+  $.elementFromPoint = (x, y) => {
     var moved = false;
     var yo = window.pageYOffset;
     var xo = window.pageXOffset;
@@ -46,6 +45,6 @@
   }
 
    // https://gist.github.com/997619
-  window.requestAnimationFrame = function(a,b){while(a--&&!(b=window["oR0msR0mozR0webkitR0r".split(0)[a]+"equestAnimationFrame"]));return b||function(a){setTimeout(a,15)}}(5);
+  window.requestAnimationFrame = ((a, b) => {while(a--&&!(b=window["oR0msR0mozR0webkitR0r".split(0)[a]+"equestAnimationFrame"]));return b||(a => {setTimeout(a,15)});})(5);
 
-})(Zepto);
+}))(Zepto);

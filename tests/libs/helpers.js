@@ -1,4 +1,4 @@
-(function ($) {
+(($ => {
   // simulate
   $.fn.simdrag = function (fromPos, toPos) {
     return this.each(function () {
@@ -8,4 +8,4 @@
         .simulate('mouseup',toPos);
     });
   }
-})(Zepto);
+}))(Zepto);
